@@ -1,0 +1,36 @@
+﻿
+@model  IEnumerable<StoreyedMedia.Model.Story>
+@{
+    Layout = "";
+}
+
+@foreach (var item in Model)
+{
+    
+      <div class="@(Model.First()==item ? "item active": "item") ">
+        
+                <img src="@item.FeaturedImage" alt="Carousel 2"> @*~/Content/images/hero-1.jpg*@
+                <div class="carousel-caption">
+                    <div class="caption-img">
+                        <span><img src="@item.SourceLogo"></span> @*~/Content/images/the-new-york-times-logo.png*@
+                    </div>
+
+                    <div class="carousel-title">
+                        @item.Title
+                        @*Vietnam: The War<br> That Killed Trust*@
+                    </div>
+                    <div class="small-text">
+                        @item.LogLine
+                        @*The legacy of the war still shapes America, even if most of us are too young to remember it.*@
+                    </div>
+
+                    <div class="mt-10">
+                        <button class="btn carousel-btn-default mr-20">View Details</button>
+                        <button class="addToList btn carousel-btn-primary">Add to Mylist</button>
+                    </div>
+
+                </div>
+            </div>
+            }
+
+            

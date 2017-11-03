@@ -1,0 +1,47 @@
+// Grays
+// -------------------------
+
+$gray-darker:            #242424 !default; // #242424
+$gray-dark:              #333333 !default;              // #333333
+$gray:                   #666666 !default; // #666666
+$gray-light:             lighten(#000, 60%) !default;   // #999
+$gray-lighter:           #cccccc !default;
+$gray-lightest:          #ededed !default;
+$gray-white-ligther:     #f8f8f8;
+$body-bg:                #ffffff;
+$gray-blue:              #79949e;
+$disqus-text-color:      #79949e;
+$gray-background:        #e9ecec;
+
+// Brand colors
+// -------------------------
+$primary-color:         #233366 !default;
+$secondary-color:       #b9553d !default;
+$black-color:           #000;
+$white-color:           #fff;
+$bdr-gray:              #ddd;
+$yellow-color:          #ffec57;
+$error-color:           #ff0000;
+$green-color:           #669933;
+$xs-menu-bg-color:      #242a2c;
+$xs-menu-bdr-color:     #393f40;
+$xs-menu-dark-bg:       #1a1f20;
+
+$button-red:            #b9553d;
+$primary-btn-hover:     #556e9e;
+$red-icon:              #cc6633;
+$yellow-dark-color:     #ffcc33;
+
+// Typography
+// -------------------------
+$body-font: 'Lato', sans-serif !default;
+$font-size-base: 14px;
+
+// Headings
+$page-title-size: 17px !default;
+$headings-font-family: Neris-Black,'Lato', sans-serif !default;
+$title-font-family: Neris-Bold,'Lato', sans-serif !default;
+$title-carousel-font-family: Neris-SemiBold,'Lato', sans-serif !default;
+
+$btn-filled-bg-color:   $button-red;
+$btn-filled-border-color: $white-color;

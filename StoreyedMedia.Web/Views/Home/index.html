@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Story Scout | Homepage</title>
+  <!--<link rel="icon" type="image/png" href="images/favicon.png" />-->
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="stylesheet" href="css/style.css">
+
+  <!--[if IE]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+  <!-- Search Modal Popup Starts Here -->
+  <div class="modal fade bs-example-modal-lg advance-search-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg custom-modal" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="icon-close"></span></button>
+          <button type="button" class="btn refine-btn">Refine Results</button>
+        </div>
+        <div class="modal-body">
+          <h2 class="sub-title margin-none">Keywords</h2>
+          <input type="text" class="form-control text-box mt-5" value="Rivals">
+
+          <div class="keyword-search-out">
+            <h2 class="sub-title margin-modal">Sources</h2>
+            <div class="row">
+              <div class="col-sm-6 col-md-3">
+                <label class="control control--checkbox">
+                    All
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">
+                    Bloomberg
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">
+                    The Guardian
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+
+              <div class="col-sm-6 col-md-3">
+                <label class="control control--checkbox">
+                      Huffington Post
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                      The McClatcy Compny
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                      The New republic
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+              </div>
+
+              <div class="col-sm-6 col-md-3">
+                <label class="control control--checkbox">
+                      New York Times  
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                      NPR
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                      The Smithonian 
+                      Institute
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+              </div>
+
+              <div class="col-sm-6 col-md-3">
+                <label class="control control--checkbox">
+                      The Wall Street Journal
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                      Washington Post
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+              </div>
+            </div>
+
+            <h2 class="sub-title margin-modal">Tags</h2>
+            <h3 class="sub-title">Genres</h3>
+            <div class="row">
+              <div class="col-sm-6 col-md-3">
+                <label class="control control--checkbox">
+                    Action   
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">
+                    Adventure
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">
+                    Animation
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">
+                    Aspirational
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">
+                    Comedy
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">
+                    Coming-of-age
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">
+                    Crime
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">
+                    Disaster
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+
+              <div class="col-sm-6 col-md-3">
+                <label class="control control--checkbox">
+                    Dramedy
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                    Fath-based
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                    Family
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                    Fantasy
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                    Good Title
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                    Historical
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                    Hirror/Thriller
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                    Inspirational 
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+              </div>
+
+              <div class="col-sm-6 col-md-3">
+                <label class="control control--checkbox">
+                    Kids
+                      <input type="checkbox" name="">
+                      <div class="control__indicator"></div>
+                    </label>
+                <label class="control control--checkbox">
+                    Memoir/Biopic
+                      <input type="checkbox" name="">
+                      <div class="control__indicator"></div>
+                    </label>
+                <label class="control control--checkbox">
+                    Musical
+                      <input type="checkbox" name="">
+                      <div class="control__indicator"></div>
+                    </label>
+                <label class="control control--checkbox">
+                    Mystery
+                      <input type="checkbox" name="">
+                      <div class="control__indicator"></div>
+                    </label>
+                <label class="control control--checkbox">
+                    Period
+                      <input type="checkbox" name="">
+                      <div class="control__indicator"></div>
+                    </label>
+                <label class="control control--checkbox">
+                    Political
+                      <input type="checkbox" name="">
+                      <div class="control__indicator"></div>
+                    </label>
+                <label class="control control--checkbox">
+                    Road/Travel
+                      <input type="checkbox" name="">
+                      <div class="control__indicator"></div>
+                    </label>
+                <label class="control control--checkbox">
+                    Romance
+                      <input type="checkbox" name="">
+                      <div class="control__indicator"></div>
+                    </label>
+              </div>
+
+              <div class="col-sm-6 col-md-3">
+                <label class="control control--checkbox">
+                    Science-Fiction
+                        <input type="checkbox" name="">
+                        <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">
+                    Seniors
+                        <input type="checkbox" name="">
+                        <div class="control__indicator"></div>
+                      </label>
+                <label class="control control--checkbox">
+                    Serialized Soap
+                        <input type="checkbox" name="">
+                        <div class="control__indicator"></div>
+                      </label>
+                <label class="control control--checkbox">
+                    Sports
+                        <input type="checkbox" name="">
+                        <div class="control__indicator"></div>
+                      </label>
+                <label class="control control--checkbox">
+                    War
+                        <input type="checkbox" name="">
+                        <div class="control__indicator"></div>
+                      </label>
+                <label class="control control--checkbox">
+                    Western
+                        <input type="checkbox" name="">
+                        <div class="control__indicator"></div>
+                      </label>
+                <label class="control control--checkbox">
+                    Young Adult
+                        <input type="checkbox" name="">
+                        <div class="control__indicator"></div>
+                      </label>
+              </div>
+            </div>
+
+            <h3 class="sub-title">Relationship</h3>
+            <div class="row">
+              <div class="col-sm-6 col-md-3">
+                <label class="control control--checkbox">
+                    Best Friends   
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">
+                    Business Partners
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">
+                    Dating
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+                <label class="control control--checkbox">
+                    Divorced
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+              </div>
+
+              <div class="col-sm-6 col-md-3">
+                <label class="control control--checkbox">
+                    Enstranged
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                    Family
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                    In-Lawas
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+                <label class="control control--checkbox">
+                    Married
+                    <input type="checkbox" name="">
+                    <div class="control__indicator"></div>
+                  </label>
+              </div>
+
+              <div class="col-sm-6 col-md-3">
+                <label class="control control--checkbox">
+                    Odd Couple
+                      <input type="checkbox" name="">
+                      <div class="control__indicator"></div>
+                    </label>
+                <label class="control control--checkbox">
+                    Open Relationship
+                      <input type="checkbox" name="">
+                      <div class="control__indicator"></div>
+                    </label>
+                <label class="control control--checkbox">
+                    Parent-Child
+                      <input type="checkbox" name="">
+                      <div class="control__indicator"></div>
+                    </label>
+                <label class="control control--checkbox">
+                    Rivals
+                      <input type="checkbox" name="">
+                      <div class="control__indicator"></div>
+                    </label>
+              </div>
+
+              <div class="col-sm-6 col-md-3">
+                <label class="control control--checkbox">
+                    Siblings
+                        <input type="checkbox" name="">
+                        <div class="control__indicator"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-12 text-right advance-search-more">
+              <a href="javascript:void(0)" class="more-link more">More <span class="icon-plus"></span></a>
+              <a href="javascript:void(0)" class="more-link less hidden">Less <span class="icon-minus"></span></a>
+            </div>
+          </div>
+
+          <h2 class="sub-title margin-modal">Availablilty </h2>
+          <div class="row">
+            <div class="col-sm-12">
+              <label class="control control--checkbox">
+                    Hide unavailable Stories   
+                  <input type="checkbox" name="">
+                  <div class="control__indicator"></div>
+                </label>
+            </div>
+          </div>
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary">Apply</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Search Modal Popup Ends Here -->
+
+  <header class="header-out fixed-top">
+    <div class="header-main-nav">
+      <div class="container hidden-xs">
+        <div class="navbar-header"><a href="index.html" title="Story Scout Home" class="story-scout-logo"></a></div>
+
+        <nav class="nav text-right">
+          <ul>
+            <li>
+              <a href="javascript:void(0)">Browse all</a>
+            </li>
+            <li>
+              <a href="discover-tags.html">Discover Tags</a>
+            </li>
+
+            <li class="search">
+              <div class="form-group">
+                <div class="icon-addon addon-md">
+                  <input type="text" placeholder="Search tags, keywords, genres..." class="form-control" id="search">
+                  <label for="search" class="icon-search" rel="tooltip" title="search"></label>
+                </div>
+              </div>
+
+              <a href="javascript:void(0)" class="advance-search-link" data-toggle="modal" data-target=".advance-search-modal">Advance Search</a>
+            </li>
+
+            <li>
+              <a href="javascript:void(0)">My List</a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">Contacts</a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">Notifications</a>
+            </li>
+            <li>
+              <a href="javascript:void(0)">Account</a>
+            </li>
+
+          </ul>
+        </nav>
+      </div>
+      <div class="container visible-xs">
+        <nav class="nav">
+          <span class="navbar-header pull-left"><a href="index.html" title="Story Scout Home" class="story-scout-logo"></a></span>
+
+          <ul class="pull-right">
+            <li>
+              <!--Navbar-->
+              <button type="button" class="toggle-button navbar-toggle" title="Menu">
+                      <!--<span class="sr-only">Toggle navigation</span>-->
+                      <span class="icon-bar top-bars"></span>
+                      <span class="icon-bar middle-bars"></span>
+                      <span class="icon-bar bottom-bars"></span>
+                    </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+
+    <div class="xs-search-out visible-xs">
+      <div class="form-group">
+        <div class="icon-addon addon-md">
+          <input type="text" placeholder="Search tags, keywords, genres..." class="form-control" id="search">
+          <label for="search" class="icon-search" rel="tooltip" title="search"></label>
+        </div>
+        <a href="javascript:void(0)" class="advance-search-link"  data-toggle="modal" data-target=".advance-search-modal">Advance Search</a>
+      </div>
+    </div>
+
+  </header>
+
+  <!--Mobile Navigation-->
+  <div class="menu slideout-menu" id="xsMenu">
+    <nav>
+      <ul>
+        <li>
+          <a href="javascript:void(0)">Browse all</a>
+        </li>
+        <li>
+          <a href="discover-tags.html">Discover Tags</a>
+        </li>
+        <li>
+          <a href="javascript:void(0)">My List</a>
+        </li>
+        <li>
+          <a href="javascript:void(0)">Contacts</a>
+        </li>
+        <li>
+          <a href="javascript:void(0)">Notifications</a>
+        </li>
+        <li>
+          <a href="javascript:void(0)">Account</a>
+        </li>
+      </ul>
+
+      <div class="xs-menu-social">
+        <ul>
+          <li>
+            <a href="javascript:void(0)"><i class="icon-facebook"></i></a>
+            <a href="javascript:void(0)"><i class="icon-twitter"></i></a>
+            <a href="javascript:void(0)"><i class="icon-instagram"></i></a>
+          </li>
+        </ul>
+      </div>
+
+      <ul>
+        <li>
+          <a href="javascript:void(0)" class="icon-plus">
+            Our Stories
+          </a>
+          <div class="menu-expanded">
+            <a href="javascript:void(0)">Browse All</a>
+            <a href="javascript:void(0)">Discover Tags</a>
+            <a href="javascript:void(0)">Contact</a>
+            <a href="javascript:void(0)">My List</a>
+          </div>
+        </li>
+        <li>
+          <a href="javascript:void(0)" class="icon-plus">
+            Company
+          </a>
+          <div class="menu-expanded">
+            <a href="javascript:void(0)">About Us</a>
+            <a href="javascript:void(0)">Jobs</a>
+            <a href="javascript:void(0)">Legal</a>
+          </div>
+        </li>
+        <li>
+          <a href="javascript:void(0)" class="icon-plus">
+            Support
+          </a>
+          <div class="menu-expanded">
+            <a href="javascript:void(0)">Contact Us</a>
+            <a href="javascript:void(0)">Address</a>
+            <a href="javascript:void(0)">Phone</a>
+          </div>
+        </li>
+      </ul>
+
+      <div class="xs-copyright-out">
+        <div class="footer-logo">
+          <img src="images/story-scout-footer-logo.png" width="110" alt="Story Scout Logo">
+        </div>
+        <div class="copy-right-text">
+          &copy; 2017 Storied Media Group LLC
+        </div>
+      </div>
+
+    </nav>
+
+  </div>
+
+  <main id="xsPanel" class="slideout-panel">
+    <div class="content-wrapper xs-pad-t-none">
+
+      <div class="home-carousel-out">
+        <div id="home-carousel" class="carousel slide" data-ride="carousel">
+          <!-- Indicators -->
+          <ol class="carousel-indicators">
+            <li data-target="#home-carousel" data-slide-to="0" class="active"></li>
+            <li data-target="#home-carousel" data-slide-to="1"></li>
+            <li data-target="#home-carousel" data-slide-to="2"></li>
+          </ol>
+
+          <!-- Wrapper for slides -->
+          <div class="carousel-inner" role="listbox">
+            <div class="item active">
+              <img src="images/hero-1.jpg" alt="Carousel 1">
+              <div class="carousel-caption">
+                <div class="caption-img">
+                  <span><img src="images/the-new-york-times-logo.png"></span>
+                </div>
+                <div class="carousel-title">
+                  Vietnam: The War<br> That Killed Trust
+                </div>
+                <div class="small-text">
+                  The legacy of the war still shapes America, even if most of us are too young to remember it.
+                </div>
+
+                <div class="mt-10">
+                  <button class="btn carousel-btn-default mr-20">View Details</button>
+                  <button class="btn carousel-btn-primary">Add to Mylist</button>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="item">
+              <img src="images/hero-1.jpg" alt="Carousel 2">
+              <div class="carousel-caption">
+                <div class="caption-img">
+                  <span><img src="images/the-new-york-times-logo.png"></span>
+                </div>
+
+                <div class="carousel-title">
+                  Vietnam: The War<br> That Killed Trust
+                </div>
+                <div class="small-text">
+                  The legacy of the war still shapes America, even if most of us are too young to remember it.
+                </div>
+
+                <div class="mt-10">
+                  <button class="btn carousel-btn-default mr-20">View Details</button>
+                  <button class="btn carousel-btn-primary">Add to Mylist</button>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="item">
+              <img src="images/hero-1.jpg" alt="Carousel 2">
+              <div class="carousel-caption">
+                <div class="caption-img">
+                  <span><img src="images/the-new-york-times-logo.png"></span>
+                </div>
+                <div class="carousel-title">
+                  Vietnam: The War<br> That Killed Trust
+                </div>
+                <div class="small-text">
+                  The legacy of the war still shapes America, even if most of us are too young to remember it.
+                </div>
+
+                <div class="mt-10">
+                  <button class="btn carousel-btn-default mr-20">View Details</button>
+                  <button class="btn carousel-btn-primary">Add to Mylist</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Controls -->
+          <a class="left carousel-control hidden-xs" href="#home-carousel" role="button" data-slide="prev">
+            <span class="icon-previous-arrow" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="right carousel-control hidden-xs" href="#home-carousel" role="button" data-slide="next">
+            <span class="icon-next-arrow" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+
+      <!--Main Container Starts Here -->
+      <div>
+        <div class="white-background">
+          <div class="container">
+            <h2 class="sub-title">Featured stories</h2>
+          </div>
+        </div>
+      </div>
+
+      <div class="gray-background">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+              <!--Card-->
+              <div class="card mb-30">
+                <div class="card-header">
+                  <div class="posted-img-out">
+                    <span class="icon-theguardian"></span>
+                  </div>
+                  <img src="images/story-img-1.png" alt="Featured story" class="img-responsive">
+                </div>
+
+                <div class="card-container">
+                  <div class="title">
+                    'It's like I've been born again': the young Syrians making a new life in Mexico
+                  </div>
+                  <div class="posted-out">
+                    <span class="posted-date">July 14, 2017</span>
+                    <span class="posted-by"><a href="javascript:void(0)">The Guardian</a></span>
+                  </div>
+                  <p>Some came to Mexico fearing they would find more violence. But instead they've found a new home and a second
+                    chance.
+                  </p>
+                </div>
+
+                <div class="card-footer">
+                  <div class="btn-out">
+                    <button type="button" class="btn btn-primary btn-xs">View Details</button>
+                    <button type="button" class="btn btn-default btn-xs">Add to My List</button>
+                  </div>
+
+                  <div class="available-out">
+                    <span class="icon-available"></span>
+                    <span>Available</span>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-3 hidden-xs">
+              <!--Card-->
+              <div class="card mb-30">
+                <div class="card-header">
+                  <div class="posted-img-out">
+                    <span class="icon-huffpost"></span>
+                  </div>
+                  <img src="images/story-img-2.png" alt="Featured story" class="img-responsive">
+                </div>
+
+                <div class="card-container">
+                  <div class="title">
+                    The Maddening Maze of Getting A Syrian Passport Abroad.
+                  </div>
+                  <div class="posted-out">
+                    <span class="posted-date">July 14, 2017</span>
+                    <span class="posted-by"><a href="javascript:void(0)">Syria Deeply</a></span>
+                  </div>
+                  <p>A Syrian passport once cost $9 and took only a few hours to issue. As the Syrian conflict enters its seventh
+                    year. Syrians in Turkey are paying up to $2,000 and waiting for months to get one of the world's weakest
+                    passports.
+                  </p>
+                </div>
+
+                <div class="card-footer">
+                  <div class="btn-out">
+                    <button type="button" class="btn btn-primary btn-xs">View Details</button>
+                    <button type="button" class="btn btn-default btn-xs">Add to My List</button>
+                  </div>
+
+                  <div class="available-out">
+                    <div class="option-expired">
+                      Optioned (Expires Dec 13, 2017)
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-3 hidden-xs">
+              <!--Card-->
+              <div class="card mb-30">
+                <div class="card-header">
+                  <div class="posted-img-out">
+                    <span class="icon-the-washington-post"></span>
+                  </div>
+                  <img src="images/story-img-3.png" alt="Featured story" class="img-responsive">
+                </div>
+
+                <div class="card-container">
+                  <div class="title">
+                    Her current students are the grandchildren of ther fromer students.
+                  </div>
+                  <div class="posted-out">
+                    <span class="posted-date">July 14, 2017</span>
+                    <span class="posted-by"><a href="javascript:void(0)">The Washington Post</a></span>
+                  </div>
+                  <p>After more than 60 years with Prince William Country public schools in Virginia, school counselor Lillian
+                    Orlich, 89, has retired. Once called a "damn Yankee" when she first arrived in Virginia in the 1950s.
+                    "Miss O" earned...
+                  </p>
+                </div>
+
+                <div class="card-footer">
+                  <div class="btn-out">
+                    <button type="button" class="btn btn-primary btn-xs">View Details</button>
+                    <button type="button" class="btn btn-default btn-xs">Add to My List</button>
+                  </div>
+
+                  <div class="available-out">
+                    <span class="icon-available"></span>
+                    <span>Available</span>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-3 hidden-xs">
+              <!--Card-->
+              <div class="card mb-30">
+                <div class="card-header">
+                  <div class="posted-img-out">
+                    <span class="icon-bloomberg"></span>
+                  </div>
+                  <img src="images/story-img-4.png" alt="Featured story" class="img-responsive">
+                </div>
+
+                <div class="card-container">
+                  <div class="title">
+                    Wizard World: Comic Con Co. You Haven't Heard About
+                  </div>
+                  <div class="posted-out">
+                    <span class="posted-date">July 14, 2017</span>
+                    <span class="posted-by"><a href="javascript:void(0)">Bloomberg</a></span>
+                  </div>
+                  <p>Wizard World CEO and President John Macaluso discusses producing comic con events, working with celebrities
+                    and plans for expansion. He speaks on "Taking Stock."
+                  </p>
+                </div>
+
+                <div class="card-footer">
+                  <div class="btn-out">
+                    <button type="button" class="btn btn-primary btn-xs">View Details</button>
+                    <button type="button" class="btn btn-default btn-xs">Add to My List</button>
+                  </div>
+
+                  <div class="available-out">
+                    <div class="option-expired">
+                      Optioned (Expires Dec 13, 2017)
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-3 hidden-xs">
+              <!--Card-->
+              <div class="card mb-30">
+                <div class="card-header">
+                  <div class="posted-img-out">
+                    <span class="icon-theguardian"></span>
+                  </div>
+                  <img src="images/story-img-1.png" alt="Featured story" class="img-responsive">
+                </div>
+
+                <div class="card-container">
+                  <div class="title">
+                    'It's like I've been born again': the young Syrians making a new life in Mexico
+                  </div>
+                  <div class="posted-out">
+                    <span class="posted-date">July 14, 2017</span>
+                    <span class="posted-by"><a href="javascript:void(0)">The Guardian</a></span>
+                  </div>
+                  <p>Some came to Mexico fearing they would find more violence. But instead they've found a new home and a second
+                    chance.
+                  </p>
+                </div>
+
+                <div class="card-footer">
+                  <div class="btn-out">
+                    <button type="button" class="btn btn-primary btn-xs">View Details</button>
+                    <button type="button" class="btn btn-default btn-xs">Add to My List</button>
+                  </div>
+
+                  <div class="available-out">
+                    <span class="icon-available"></span>
+                    <span>Available</span>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-3 hidden-xs">
+              <!--Card-->
+              <div class="card mb-30">
+                <div class="card-header">
+                  <div class="posted-img-out">
+                    <span class="icon-huffpost"></span>
+                  </div>
+                  <img src="images/story-img-2.png" alt="Featured story" class="img-responsive">
+                </div>
+
+                <div class="card-container">
+                  <div class="title">
+                    The Maddening Maze of Getting A Syrian Passport Abroad.
+                  </div>
+                  <div class="posted-out">
+                    <span class="posted-date">July 14, 2017</span>
+                    <span class="posted-by"><a href="javascript:void(0)">Syria Deeply</a></span>
+                  </div>
+                  <p>A Syrian passport once cost $9 and took only a few hours to issue. As the Syrian conflict enters its seventh
+                    year. Syrians in Turkey are paying up to $2,000 and waiting for months to get one of the world's weakest
+                    passports.
+                  </p>
+                </div>
+
+                <div class="card-footer">
+                  <div class="btn-out">
+                    <button type="button" class="btn btn-primary btn-xs">View Details</button>
+                    <button type="button" class="btn btn-default btn-xs">Add to My List</button>
+                  </div>
+
+                  <div class="available-out">
+                    <div class="option-expired">
+                      Optioned (Expires Dec 13, 2017)
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-3 hidden-xs">
+              <!--Card-->
+              <div class="card mb-30">
+                <div class="card-header">
+                  <div class="posted-img-out">
+                    <span class="icon-the-washington-post"></span>
+                  </div>
+                  <img src="images/story-img-3.png" alt="Featured story" class="img-responsive">
+                </div>
+
+                <div class="card-container">
+                  <div class="title">
+                    Her current students are the grandchildren of ther fromer students.
+                  </div>
+                  <div class="posted-out">
+                    <span class="posted-date">July 14, 2017</span>
+                    <span class="posted-by"><a href="javascript:void(0)">The Washington Post</a></span>
+                  </div>
+                  <p>After more than 60 years with Prince William Country public schools in Virginia, school counselor Lillian
+                    Orlich, 89, has retired. Once called a "damn Yankee" when she first arrived in Virginia in the 1950s.
+                    "Miss O" earned...
+                  </p>
+                </div>
+
+                <div class="card-footer">
+                  <div class="btn-out">
+                    <button type="button" class="btn btn-primary btn-xs">View Details</button>
+                    <button type="button" class="btn btn-default btn-xs">Add to My List</button>
+                  </div>
+
+                  <div class="available-out">
+                    <span class="icon-available"></span>
+                    <span>Available</span>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-4 col-lg-3 hidden-xs">
+              <!--Card-->
+              <div class="card mb-30">
+                <div class="card-header">
+                  <div class="posted-img-out">
+                    <span class="icon-bloomberg"></span>
+                  </div>
+                  <img src="images/story-img-4.png" alt="Featured story" class="img-responsive">
+                </div>
+
+                <div class="card-container">
+                  <div class="title">
+                    Wizard World: Comic Con Co. You Haven't Heard About
+                  </div>
+                  <div class="posted-out">
+                    <span class="posted-date">July 14, 2017</span>
+                    <span class="posted-by"><a href="javascript:void(0)">Bloomberg</a></span>
+                  </div>
+                  <p>Wizard World CEO and President John Macaluso discusses producing comic con events, working with celebrities
+                    and plans for expansion. He speaks on "Taking Stock."
+                  </p>
+                </div>
+
+                <div class="card-footer">
+                  <div class="btn-out">
+                    <button type="button" class="btn btn-primary btn-xs">View Details</button>
+                    <button type="button" class="btn btn-default btn-xs">Add to My List</button>
+                  </div>
+
+                  <div class="available-out">
+                    <div class="option-expired">
+                      Optioned (Expires Dec 13, 2017)
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center mt-10 mb-10">
+            <button class="btn btn-default btn-white btn-md">View more featured articles</button>
+          </div>
+        </div>
+      </div>
+      <!--Main Container Ends Here -->
+
+
+      <!-- Most Popular Tags Starts Here -->
+      <div class="white-section-out most-popular-tags">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-8">
+              <h2 class="sub-title">
+                Most Popular Tags
+              </h2>
+            </div>
+            <div class="col-sm-4 hidden-xs">
+              <button class="btn btn-default btn-white view-all-btn pull-right">
+                  View All Tags
+                  <span class="icon-next-arrow"></span>
+                </button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-3">
+              <div class="header">
+                <span class="icon-genres"></span> Genres
+              </div>
+              <div>
+                <ul>
+                  <li><a href="javascript:void(0)">Action</a></li>
+                  <li><a href="javascript:void(0)">Adventure</a></li>
+                  <li><a href="javascript:void(0)">Animation</a></li>
+                  <li><a href="javascript:void(0)">Aspirational</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-xs-6 col-sm-6 col-md-3">
+              <div class="header">
+                <span class="icon-relationship"></span> Relationship
+              </div>
+              <div>
+                <ul>
+                  <li><a href="javascript:void(0)">Best Friends</a></li>
+                  <li><a href="javascript:void(0)">Business Partners</a></li>
+                  <li><a href="javascript:void(0)">Dating</a></li>
+                  <li><a href="javascript:void(0)">Divorced</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-xs-6 col-sm-6 col-md-3">
+              <div class="header">
+                <span class="icon-geography"></span> Geography
+              </div>
+              <div>
+                <ul>
+                  <li><a href="javascript:void(0)">Africa</a></li>
+                  <li><a href="javascript:void(0)">Artic</a></li>
+                  <li><a href="javascript:void(0)">Asia</a></li>
+                  <li><a href="javascript:void(0)">Austrailia</a></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-xs-6 col-sm-6 col-md-3">
+              <div class="header">
+                <span class="icon-main-character"></span> Main Character
+              </div>
+              <div>
+                <ul>
+                  <li><a href="javascript:void(0)">African American</a></li>
+                  <li><a href="javascript:void(0)">Asia</a></li>
+                  <li><a href="javascript:void(0)">Caucasian</a></li>
+                  <li><a href="javascript:void(0)">Female</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center visible-xs">
+            <button class="btn btn-default btn-white view-all-btn">
+              View All Tags
+              <span class="icon-next-arrow"></span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+      <!-- Most Popular Tags Ends Here -->
+
+
+      <!--Footer Starts Here-->
+      <footer class="footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-4 col-md-3 footer-logo-out">
+              <div class="footer-logo">
+                <img src="images/story-scout-footer-logo.png" alt="Story Scout Footer Logo">
+              </div>
+              <div class="footer-copyright">
+                &copy; 2017 Storied Media Group LLC
+              </div>
+              <div class="footer-social">
+                <a href="javascript:void(0)"><i class="icon-facebook"></i></a>
+                <a href="javascript:void(0)"><i class="icon-twitter"></i></a>
+                <a href="javascript:void(0)"><i class="icon-instagram"></i></a>
+              </div>
+            </div>
+            <div class="col-xs-5 col-sm-2 col-md-2">
+              <h4>Our Stories</h4>
+              <a href="javascript:void(0)">Browse All</a>
+              <a href="discover-tags.html">Discover Tags</a>
+              <a href="javascript:void(0)">Contact</a>
+              <a href="javascript:void(0)">My List</a>
+            </div>
+            <div class="col-xs-3 col-sm-2 col-md-2">
+              <h4>Company</h4>
+              <a href="javascript:void(0)">About Us</a>
+              <a href="javascript:void(0)">Jobs</a>
+              <a href="javascript:void(0)">Legal</a>
+            </div>
+            <div class="col-xs-4 col-sm-2 col-md-2">
+              <h4>Support</h4>
+              <a href="javascript:void(0)">Contact Us</a>
+              <a href="javascript:void(0)">Address</a>
+              <a href="javascript:void(0)">Phone</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+      <!--Footer Ends Here-->
+
+    </div>
+  </main>
+
+
+
+  <script src="js/jquery-1.11.1.min.js"></script>
+  <script src="assets/javascripts/bootstrap.min.js"></script>
+  <script src="js/slideout.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+
+</html>

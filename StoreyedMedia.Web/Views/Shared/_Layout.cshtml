@@ -1,0 +1,269 @@
+﻿<!DOCTYPE html>
+<html lang="">
+<head>
+   
+    @*@Styles.Render("~/Content/css")*@
+    @Scripts.Render("~/bundles/modernizr")
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Story Scout | Homepage</title>
+    <!--<link rel="icon" type="image/png" href="images/favicon.png" />-->
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" href="~/Content/css/style.css">
+
+    <!--[if IE]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+    <header class="header-out fixed-top">
+        <div class="header-main-nav">
+            <div class="container hidden-xs">
+                <div class="navbar-header"><a href="index.html" title="Story Scout Home" class="story-scout-logo"></a></div>
+
+                <nav class="nav text-right">
+                    <ul>
+                        <li>
+                            <a href="#">Browse all</a>
+                        </li>
+                        <li>
+                            <a href="#">Discover Tags</a>
+                        </li>
+
+                        <li class="search">
+                            <div class="form-group">
+                                <div class="icon-addon addon-md">
+                                    <input type="text" placeholder="Search tags, keywords, genres..." class="form-control" id="search">
+                                    <label for="search" class="icon-search" rel="tooltip" title="search"></label>
+                                </div>
+                            </div>
+
+                            <a href="#" class="advance-search-link">Advance Search</a>
+                        </li>
+
+                        <li>
+                            <a href="#">My List</a>
+                        </li>
+                        <li>
+                            <a href="#">Contacts</a>
+                        </li>
+                        <li>
+                            <a href="#">Notifications</a>
+                        </li>
+                        <li>
+                            <a href="#">Account</a>
+                        </li>
+
+                    </ul>
+                </nav>
+            </div>
+            <div class="container visible-xs">
+                <nav class="nav">
+                    <span class="navbar-header pull-left"><a href="index.html" title="Story Scout Home" class="story-scout-logo"></a></span>
+
+                    <ul class="pull-right">
+                        <li>
+                            <!--Navbar-->
+                            <button type="button" class="toggle-button navbar-toggle" title="Menu">
+                                <!--<span class="sr-only">Toggle navigation</span>-->
+                                <span class="icon-bar top-bars"></span>
+                                <span class="icon-bar middle-bars"></span>
+                                <span class="icon-bar bottom-bars"></span>
+                            </button>
+                        </li>
+                    </ul>
+
+                </nav>
+            </div>
+        </div>
+
+    </header>
+
+    <!--Mobile Navigation-->
+    <div class="menu slideout-menu" id="xsMenu">
+        <nav>
+            <ul>
+                <li class="search">
+                    <div class="form-group">
+                        <div class="icon-addon addon-md">
+                            <input type="text" placeholder="Search tags, keywords, genres..." class="form-control" id="search-xs">
+                            <label for="search-xs" class="icon-search" rel="tooltip" title="search"></label>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <a href="#">Browse all</a>
+                </li>
+                <li>
+                    <a href="#">Discover Tags</a>
+                </li>
+                <li>
+                    <a href="#">My List</a>
+                </li>
+                <li>
+                    <a href="#">Contacts</a>
+                </li>
+                <li>
+                    <a href="#">Notifications</a>
+                </li>
+                <li>
+                    <a href="#">Account</a>
+                </li>
+            </ul>
+
+        </nav>
+
+    </div>
+     
+        @RenderBody()
+        @*<hr />*@
+
+        <footer>
+            <!-- Most Popular Tags Starts Here -->
+            <div class="white-section-out most-popular-tags">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <h2 class="sub-title">
+                                Most Popular Tags
+                            </h2>
+                        </div>
+                        <div class="col-sm-4 hidden-xs">
+                            <button class="btn btn-default btn-white view-all-btn pull-right">
+                                View All Tags
+                                <span class="icon-next-arrow"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-3">
+                            <div class="header">
+                                <span class="icon-genres"></span> Genres
+                            </div>
+                            <div>
+                                <ul>
+                                    <li><a href="javascript:void(0)">Action</a></li>
+                                    <li><a href="javascript:void(0)">Adventure</a></li>
+                                    <li><a href="javascript:void(0)">Animation</a></li>
+                                    <li><a href="javascript:void(0)">Aspirational</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-6 col-md-3">
+                            <div class="header">
+                                <span class="icon-relationship"></span> Relationship
+                            </div>
+                            <div>
+                                <ul>
+                                    <li><a href="javascript:void(0)">Best Friends</a></li>
+                                    <li><a href="javascript:void(0)">Business Partners</a></li>
+                                    <li><a href="javascript:void(0)">Dating</a></li>
+                                    <li><a href="javascript:void(0)">Divorced</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-6 col-md-3">
+                            <div class="header">
+                                <span class="icon-geography"></span> Geography
+                            </div>
+                            <div>
+                                <ul>
+                                    <li><a href="javascript:void(0)">Africa</a></li>
+                                    <li><a href="javascript:void(0)">Artic</a></li>
+                                    <li><a href="javascript:void(0)">Asia</a></li>
+                                    <li><a href="javascript:void(0)">Austrailia</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-6 col-sm-6 col-md-3">
+                            <div class="header">
+                                <span class="icon-main-character"></span> Main Character
+                            </div>
+                            <div>
+                                <ul>
+                                    <li><a href="javascript:void(0)">African American</a></li>
+                                    <li><a href="javascript:void(0)">Asia</a></li>
+                                    <li><a href="javascript:void(0)">Caucasian</a></li>
+                                    <li><a href="javascript:void(0)">Female</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center visible-xs">
+                        <button class="btn btn-default btn-white view-all-btn">
+                            View All Tags
+                            <span class="icon-next-arrow"></span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Most Popular Tags Ends Here -->
+            <!--Footer Starts Here-->
+            <footer class="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-4 col-md-3 footer-logo-out">
+                            <div class="footer-logo">
+                                <img src="~/Content/images/story-scout-footer-logo.png" alt="Story Scout Footer Logo">
+                            </div>
+                            <div class="footer-copyright">
+                                &copy; 2017 Storied Media Group LLC
+                            </div>
+                            <div class="footer-social">
+                                <a href="#"><i class="icon-facebook"></i></a>
+                                <a href="#"><i class="icon-twitter"></i></a>
+                                <a href="#"><i class="icon-instagram"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-xs-5 col-sm-2 col-md-2">
+                            <h4>Our Stories</h4>
+                            <a href="#">Browse All</a>
+                            <a href="#">Discover Tags</a>
+                            <a href="#">Contact</a>
+                            <a href="#">My List</a>
+                        </div>
+                        <div class="col-xs-3 col-sm-2 col-md-2">
+                            <h4>Company</h4>
+                            <a href="#">About Us</a>
+                            <a href="#">Jobs</a>
+                            <a href="#">Legal</a>
+                        </div>
+                        <div class="col-xs-4 col-sm-2 col-md-2">
+                            <h4>Support</h4>
+                            <a href="#">Contact Us</a>
+                            <a href="#">Address</a>
+                            <a href="#">Phone</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+            <!--Footer Ends Here-->
+        </footer>
+     
+
+    <script src="~/Scripts/jquery-2.1.3.min.js" type="text/javascript"></script>
+    <script src="~/Content/assets/javascripts/bootstrap.min.js"></script>
+    <script src="~/Content/js/slideout.min.js"></script>
+    <script src="~/Content/js/app.js"></script>  
+    @*<script src="~/Scripts/jquery-2.1.3.min.js" type="text/javascript"></script>
+    <script src="~/Content/js/jquery-1.11.1.min.js"></script>
+    <script src="~/Content/assets/javascripts/bootstrap.min.js"></script>
+    <script src="~/Content/js/slideout.min.js"></script>
+    <script src="~/Content/js/app.js"></script> 
+
+    <script src="~/Scripts/jquery-2.1.3.min.js" type="text/javascript"></script>*@
+    @*@Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)*@
+</body>
+</html>

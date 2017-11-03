@@ -1,0 +1,174 @@
+﻿@model StoreyedMedia.Model.Alert
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+        $('#btnSaveAlert').attr('disabled', 'disabled');
+        $('#AlertForm>input,input[type="checkbox"]').each(function () {
+
+            $(this).change(function () {
+
+                $(this).addClass('dirty');
+                $('#btnSaveAlert').removeAttr('disabled');
+            });
+        });
+
+
+
+
+        function ValidateAlert() {
+            if ($("#SearchName").val() == "") {
+
+                $("#SearchNameError").text("Alert Name is Required");
+                $(".alert-warning").css("display", "block");
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+
+        $('input').on("keyup", function () {
+            $(".alert-warning").css("display", "none");
+        });
+        $('#btnSaveAlert').click(function () {
+
+            if (!ValidateAlert())
+            { return false; }
+            var sourcesList = null;
+            sourcesList = [];
+
+            $('input:checkbox:checked').each(function () {
+                if ($(this).hasClass("chkSourcesClass")) {
+                    sourcesList.push($(this).attr('value'));
+                }
+            });
+
+
+            var tagsList = null;
+            tagsList = [];
+
+            $('input:checkbox:checked').each(function () {
+                if ($(this).hasClass("chkTagsClass")) {
+                    tagsList.push($(this).attr('value'));
+                }
+            });
+
+            $.ajax({
+                type: "post",
+                url: "/Alert/EditAlert",
+                data: { id: $("#Id").val(), searchId: $("#SearchId").val(), name: $("#SearchName").val(), keyWords: $("#Keywords").val(), sourcesList: sourcesList, tagsList: tagsList },
+                datatype: "json",
+                success: function () {
+
+                    if ($("#SearchId").val() == undefined || $("#SearchId").val() == "" || $("#SearchId").val() == 0) {
+                        $('#alertMessages').text('Alert has been Added.');
+                    }
+
+                    else {
+                        $('#alertMessages').text('Alert has been updated.');
+                    }
+
+
+                    $('#alertModal').modal('hide');
+                    $('#contactModal').modal('show');
+                    LoadAlerts($("#Id").val());
+                    LoadStories($("#Id").val());
+
+                }
+            });
+        });
+
+
+
+        $('.chkclass').click(function () {
+            var getchkid = $(this).attr('id');
+            var isChecked = $('#' + getchkid).is(':checked');
+            if ($('#' + getchkid).is(':checked') == true) {
+                $('#td' + $(this).val()).css("color", "white");
+                $('#td' + $(this).val()).css("background-color", "blue");
+            }
+            else {
+                $('#td' + $(this).val()).css("color", "black");
+                $('#td' + $(this).val()).css("background-color", "white");
+            }
+        });
+
+
+    });
+
+</script>
+
+<div class="modal-header jumbotron">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title" id="myModalLabel4" style='font-weight: bold;'>@ViewBag.Title</h4>
+</div>
+<div class="container1 fill1" id="AlertForm">
+    @Html.HiddenFor(Model => Model.SearchId)
+
+    <h3>Alert Details</h3>
+    @Html.TextBoxFor(Model => Model.SearchName, new { @class = "form-control", @id = "SearchName", @maxlength = "50" })
+    <label id="SearchNameError" class="alert-warning" style="display:none"></label>
+    <br />
+
+    <h3>KEYWORDS</h3>
+    @Html.TextBoxFor(Model => Model.Keywords, new { @class = "form-control", @id = "Keywords" })
+    <br />
+    <h4>SOURCES</h4>
+    <div class="row">
+        @foreach (var item in Model.SourcesList)
+        {
+
+            <div class="col-md-3">
+                <div class="checkbox">
+                    <input type="checkbox"
+                           name="SelectedGroups" value="@item.SourceId" id="@item.SourceId" class="chkclass chkSourcesClass"
+                           @{if (item.SearchId != 0) { <text> checked='checked' </text>       } } />
+                    <label for="@item.SourceName">@item.SourceName</label>
+                </div>
+            </div>
+
+    }
+
+
+    </div>
+
+    <br />
+    <br />
+    <h4>Tags</h4>
+    <div class="row">
+        @{string type = string.Empty;
+            foreach (var item in Model.TagsList)
+            {
+                if (item.TagType != type)
+                { <div class="row"><h5> @item.TagType </h5>  </div>
+                    type = item.TagType;
+                }
+                <div class="col-md-3">
+                    <div class="checkbox">
+                        <input type="checkbox"
+                               name="SelectedGroups" value="@item.TagId" id="@item.TagId" class="chkclass chkTagsClass"
+                               @{if (item.SearchId != 0) { <text> checked='checked' </text>    } } />
+                        <label for="@item.Tag">@item.Tag</label>
+                    </div>
+                </div>
+    }
+        }
+    </div>
+    <div class="clearfix">
+        <a class="pull-right">More</a>
+    </div>
+    <br />
+
+    <h4>AVAILABILITY</h4>
+    <div class="checkbox">
+        <input type="checkbox"
+               name="SelectedGroups" class="chkclass chkTagsClass" />
+        <label>Hide Unavailable Stories</label>
+    </div>
+
+</div>
+

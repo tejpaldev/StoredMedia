@@ -1,0 +1,65 @@
+﻿@model  IEnumerable< StoreyedMedia.Model.Story>
+
+@{
+    Layout = "";
+} 
+  
+<div class="row">
+    @foreach (var item in Model)
+    { 
+        <div class="col-sm-6 col-md-4 col-lg-3"> 
+            <!--Card-->
+            <div class="card mb-30">
+                <div class="card-header">
+                    <div class="posted-img-out">
+                        <span class="icon-theguardian"></span>
+                    </div>
+                    <img src="@item.StoryThumbnail"@*~/Content/images/story-img-1.png"*@ alt="Featured story" class="img-responsive">
+                </div>
+
+                <div class="card-container">
+                    <div class="title">
+                        @item.Title
+                        @*'It's like I've been born again': the young Syrians making a new life in Mexico*@
+                    </div>
+                    <div class="posted-out">
+                        <span class="posted-date">@item.PublishedDate.ToString("D") @*July 14, 2017*@</span>
+                        <span class="posted-by"><a href="#">@item.SourceName@*The Guardian*@</a></span>
+                    </div>
+                    <p>
+                        @item.Detail
+                        @*Some came to Mexico fearing they would find more violence. But instead they've found a new home and a second
+                            chance.*@
+                    </p>
+                </div>
+               
+                <div class="card-footer">
+                    <div class="btn-out">
+                        <button type="button" class="btn btn-primary btn-xs">View Details</button>
+                        <button type="button"   storyId="@item.StoryId" class="addToList btn btn-default btn-xs">Add to My List</button>
+                    </div>
+
+                    @if (item.Status == "Optioned")
+                    {
+                        <div class="available-out">
+                            <div class="option-expired">
+                                
+                                Optioned (Expires @item.ExpireDate.ToString("D"))
+                            </div>
+                        </div>
+                    }
+
+                    @if (item.Status == "Available")
+                    {
+                        <div class="available-out">
+                            <span class="icon-available"></span>
+                            <span>Available</span>
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+        </div>
+    }
+    </div>

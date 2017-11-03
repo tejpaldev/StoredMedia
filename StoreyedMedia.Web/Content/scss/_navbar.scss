@@ -1,0 +1,122 @@
+.header-out {
+    @include box-shadow(0 0 2px rgba(0,0,0,0.6));
+    font-family: Neris-Bold;
+
+    .story-scout-logo {
+      background: url('../images/story-scout-logo.svg') center center no-repeat;
+      background-size: 100%;
+      width: 190px;
+      height: 46px;
+      display: inline-block;
+      text-decoration: none;
+      margin: 0;
+      padding: 0 15px;
+      border-bottom: none;
+    }
+
+    &.fixed-top {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1030;
+    }
+
+    .header-main-nav {
+      padding: 20px 0;
+      background: $white-color;
+    
+      .nav {
+        ul {
+          margin: 0;
+          padding: 0;
+          list-style: none;
+          
+          li {
+            display: inline-block;
+            vertical-align: middle;
+            margin: 0;
+            padding: 0;
+
+            &.search {
+                width: 26%;
+                padding: 0 10px;
+                position: relative;
+
+                .advance-search-link {
+                  position: absolute;
+                  right: 10px;
+                  bottom: -21px;
+                  text-transform: inherit;
+                  font-family: $body-font;
+                  color: $primary-color;
+                  font-weight: 600;
+                  padding: 0;
+                }
+
+                .icon-addon {
+                    position: relative;
+                    display: block;
+                }
+                
+                .icon-addon.addon-md .icon-search {
+                    position: absolute;
+                    z-index: 2;
+                    left: 10px;
+                    font-size: 14px;
+                    width: 20px;
+                    margin-left: -2.5px;
+                    text-align: center;
+                    padding: 10px 0;
+                    top: 1px;
+                    color: $gray-light;
+                }
+                
+                .icon-addon.addon-md .form-control {
+                    padding-left: 30px;
+                    float: left;
+                    font-weight: normal;
+                    @include border-radius(17px);
+                }
+                
+                .icon-addon .form-control:focus + .icon-search,
+                .icon-addon:hover .icon-search {
+                    color: #2580db;
+                }
+            }
+  
+            >a {
+              text-transform: uppercase;
+            }
+            
+            a {
+              display: block;
+              padding: 15px 7px;
+              color: $gray-dark;
+              text-decoration: none;
+              font-size: 1em;
+              
+              &:hover {
+                color: $primary-color;
+              }
+            }
+            
+            &.active {
+              a {
+                color: $primary-color;
+              }
+            }
+          }
+        }
+        
+        .navbar-toggle {
+          display: block;
+          margin: 0;
+          
+          .icon-bar {
+            background-color: $gray-dark;
+          }
+        }
+      }
+    }
+}

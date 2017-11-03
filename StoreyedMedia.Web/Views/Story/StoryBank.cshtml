@@ -1,0 +1,783 @@
+﻿@model StoreyedMedia.Model.Story
+@{
+    ViewBag.Title = "Story";
+}
+
+<h2>Index</h2>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+    <link href="~/Content/grid-0.4.3.min.css" rel="stylesheet" type="text/css">
+    <script src="~/Scripts/jquery-2.1.3.min.js" type="text/javascript"></script>
+    <script src="~/Scripts/bootstrap.min.js" type="text/javascript"></script>
+
+    @*<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet" />*@
+    @*<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>*@
+    @*<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>*@
+
+    <script src='https://cdn.rawgit.com/pguso/jquery-plugin-circliful/master/js/jquery.circliful.min.js'></script>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>‌
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.14.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Scripts/grid-0.4.3.js" type="text/javascript"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+    @*<script src="http://js.nicedit.com/nicEdit-latest.js" type="text/javascript"></script>
+    <script type="text/javascript" src="http://js.nicedit.com/nicEdit-latest.js"></script>*@
+
+    <style type="text/css">
+        .ui-autocomplete {
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: default;
+            z-index: 1000000;
+        }
+    </style>
+    <script type="text/javascript">
+
+
+        var suggestionLink = "@Url.Action("Suggest")";
+
+        function Add() {
+            $("#spanStoryHeading").html("Add Story");
+            $("#StoryId").val("");
+            $("#Title").val("");
+            // $("#SubmittedBy").val("");
+            //$("#DatePosted").val(formatDate(e.DatePosted));
+            $("#MediaTypeId").val(0);
+            $("#SourceId").val(0);
+            $("#DateSrcPublished").val("");
+            $("#StoryLink").val("");
+            $("#Author").val("");
+            $("#Tags").val("");
+            // $("#LogLine").val(e.LogLine);
+            $("#Synopsis").val("");
+            $("#FeatureOnHomepage").prop("checked", false);
+            // $("#FeatureOnHomepage").val("");
+            $("#storyModal").modal("show");
+            $("#MediaUrlFile").val("");
+            $("#FeaturedImageFile").val("");
+            $("#MediaUrlFile").css("display", "block");
+            $("#FeaturedImageFile").css("display", "block");
+            $("#FeaturedImgBox").css("display", "none");
+            $("#divPublishedBy").css("display", "none");
+            $("#divStatus").css("display", "none");
+            $("#btnPublish").css("display", "none");
+            $("#btnSaveDraft").css("display", "none");
+            $("#btnAddBanks").css("display", "inline-block");
+            //$("#btnAddComment").css("display", "none");
+            //$("#btnCancelComment").css("display", "none");
+            //$("#commentTextArea").css("display", "none");
+            //var area2;
+            ////area2.removeInstance('Synopsis');
+            //area2 = new nicEditor({ fullPanel: true }).panelInstance('area3', { hasPanel: true });
+        }
+        function CreateAlert() {
+
+        }
+
+        function ImportContacts() {
+            var filePath= "C:\\Users\\Lenovo\\Desktop\\TestDataContacts.xls";
+            $.post('@Url.Action("ImportContacts")', { 'filePath': filePath },
+                function (data) {
+                    $('#ImportModal').modal('hide');
+                    alert("Contacts Imported Successfully!");
+                });
+
+        };
+
+
+
+         function ShowImportModal() {
+            $('#ImportModal').modal('show');
+        };
+
+
+        $(document).ready(function () {
+            $("#MediaUrlFile").on('change', function () {
+                $("#MediaUrl").val(this.files[0].name);
+            });
+
+            $("#replaceFeaturedImageFile").on('click', function () {
+                $("#FeaturedImageFile").click();
+
+                $("#FeaturedImageFile").css("display", "block");
+                $("#FeaturedImgBox").children("img").css("display", "none");
+                $("#replaceFeaturedImageFile").css("display", "none");
+                $("#removeFeaturedImageFile").css("display", "none");
+            });
+
+            $("#removeFeaturedImageFile").on('click', function () {
+                $("#FeaturedImage").val("");
+                $("#FeaturedImgBox").children("img").css("display", "none");
+                $("#FeaturedImageFile").css("display", "block");
+                $("#replaceFeaturedImageFile").css("display", "none");
+                $("#removeFeaturedImageFile").css("display", "none");
+            });
+
+            $("#FeaturedImageFile").on('change', function () {
+                $("#FeaturedImage").val(this.files[0].name);
+
+            });
+
+            $('form').ajaxForm({
+                beforeSend: function () {
+                    //status.empty();
+                    //var percentVal = '0%';
+                    //bar.width(percentVal)
+                    //percent.html(percentVal);
+                },
+                //uploadProgress: function (event, position, total, percentComplete) {
+                //    var percentVal = percentComplete + '%';
+                //    bar.width(percentVal)
+                //    percent.html(percentVal);
+                //},
+                //success: function () {
+                //    var percentVal = '100%';
+                //    bar.width(percentVal)
+                //    percent.html(percentVal);
+                //},
+                complete: function (data) {
+                    $("#storyModal").modal("hide");
+                }
+            });
+
+            $("#btnImportContact").on("click", ShowImportModal);
+            $("#btnImport").on("click", ImportContacts);
+            var contactGrid;
+            function Search() {
+                contactGrid.reload({ searchString: $("#search").val(), starred: $("#selFilter").val() });
+            };
+
+            contactGrid = $("#contactsGrid").grid({
+                dataKey: "Id",
+                uiLibrary: "bootstrap",
+                columns: [
+                    { text: '', datafield: 'Id', type: 'checkbox', width: 40, cssClass: 'chkContacts'},
+                    { field: "Id", width: 100, sortable: false, hidden: true },
+                    { field: "FirstName", sortable: true },
+                    { field: "LastName", sortable: true },
+                    { field: "Email",title: "Email", sortable: false, },
+                    { field: "CellPhone", title: "Phone", sortable: false },
+                    { field: "OfficePhone", title: "OfficePhone", sortable: false, hidden: true },
+                    { field: "Notes", title: "Notes", sortable: false },
+                    //{ title: "", field: "Edit", width: 34, type: "icon", icon: "glyphicon-star", tooltip: "Star", events: { "click": StarAContact } },
+                    //{ title: "", field: "Edit", width: 34, type: "icon", icon: "glyphicon-pencil", tooltip: "Edit", events: { "click": Edit } },
+                    //{ title: "", field: "Delete", width: 34, type: "icon", icon: "glyphicon-remove", tooltip: "Delete", events: { "click": Delete } }
+                ],
+                pager: { enable: true, limit: 10, sizes: [10,50, 100] }
+            });
+
+            $("#btnAddStory").on("click", Add);
+            //$("#btnEditStory").on("click", Edit("1"));
+            $("#btnSearch").on("click", Search);
+        });
+
+
+        setTimeout(function () {
+            $('#display-msg').fadeOut().text('');
+            $('#display-error').fadeOut().text('');
+       }, 3000);
+        function GetStoryById(Id) {
+            $.ajax({
+                type: "post",
+                url: "/Story/GetStoryById",
+                data: { "Id": Id },
+                //data: $('#formId').serialize(),
+                datatype: "json",
+                success: function (data) {
+                    Edit(data);
+                    if (data == "True") {
+                        location.reload();
+                        $(".chkContacts").prop("checked", false);
+
+
+                    } else {
+
+
+                    }
+
+                }
+            });
+        }
+        function formatDate(d)
+        {
+            var dateString = d.substr(6);
+            var currentTime = new Date(parseInt(dateString));
+            var month = currentTime.getMonth() + 1;
+            var day = currentTime.getDate();
+            var year = currentTime.getFullYear();
+            var date = day + "/" + month + "/" + year;
+            return date;
+        }
+
+        function Edit(e) {
+
+            $("#spanStoryHeading").html("Edit Story");
+            $("#divPublishedBy").css("display", "block");
+            $("#divStatus").css("display", "block");
+            $("#StoryId").val(e.StoryId);
+            $("#Title").val(e.Title);
+            $("#SubmittedBy").val(e.SubmittedBy);
+            $("#PublishedBy").val(e.PublishedBy);
+            //$("#DatePosted").val(formatDate(e.DatePosted));
+            $("#MediaTypeId").val(e.MediaTypeId);
+            $("#SourceId").val(e.SourceId);
+            $("#DateSrcPublished").val(formatDate(e.DateSrcPublished));
+            $("#StoryLink").val(e.StoryLink);
+            $("#Author").val(e.Author);
+            $("#Tags").val(e.Tags);
+            //$("#LogLine").val(e.LogLine);
+            $("#Synopsis").val(e.Synopsis);
+            $("#FeatureOnHomepage").val(e.FeatureOnHomepage);
+            $("#btnPublish").css("display", "none");
+            $("#btnSaveDraft").css("display", "inline-block");
+            $("#btnAddBanks").css("display", "none");
+            //$("#btnAddComment").css("display", "inline-block");
+            //$("#btnCancelComment").css("display", "inline-block");
+            //$("#commentTextArea").css("display", "inline-block");
+            $('#storyModal').modal({ backdrop: 'static', keyboard: false }, 'show');
+            if (e.FeaturedImage == null || e.FeaturedImage == '') {
+                $("#FeaturedImageFile").css("display", "block");
+                $("#FeaturedImageBox").css("display", "none");
+                $("#replaceFeaturedImageFile").css("display", "none");
+                $("#removeFeaturedImageFile").css("display", "none");
+            }
+            else {
+
+                $("#FeaturedImageFile").css("display", "none");
+                $("#FeaturedImgBox").css("display", "block");
+                $("#replaceFeaturedImageFile").css("display", "inline-block");
+                $("#removeFeaturedImageFile").css("display", "inline-block");
+                $("#FeaturedImgBox").children("img").attr("src", e.FeaturedImage);
+            }
+
+        }
+
+        //function SaveStory(action) {
+
+        //    //var storyDetail=[];
+        //    //contactIdList = [];
+        //    var storyDetail= {
+        //        //If Edit then set value
+        //        StoryId: "0",
+        //        //IsNew: $('#IsNew')[0].value,
+        //        Title: $('#Title')[0].value,
+        //        //CreatedOnDateTime: $('#CreatedOnDateTime')[0].value,
+        //        SubmittedBy: $('#SubmittedBy')[0].value,
+        //        DatePosted: $('#DatePosted')[0].value,
+        //        MediaTypeId: $('#MediaTypeId')[0].value,
+        //        SourceId: $('#SourceId')[0].value,
+        //        DateSrcPublished: $('#DateSrcPublished')[0].value,
+        //        StoryLink: $('#StoryLink')[0].value,
+        //        Author: $('#Author')[0].value,
+        //        Tags: $('#Tags')[0].value,
+        //        LogLine: $('#LogLine')[0].value,
+        //        Synopsis: $('#Synopsis')[0].value,
+        //        FeatureOnHomepage: $('#FeatureOnHomepage')[0].value
+        //    }
+        //    var fd = new FormData($("#frmStory"));
+        //    //var formData = new FormData();
+        //    fd.append('file', $('#FeaturedImageFile')[0].files[0]);
+        //    $.ajax({
+        //        type: "post",
+        //        url: "/Story/Save",
+        //        data: { "action": action, "story": storyDetail, "IsEdit": "0", "featuredImageFile": fd},
+        //        //data: $('#formId').serialize(),
+        //        datatype: "json",
+        //        success: function (data) {
+
+        //            if (data == "True") {
+        //                location.reload();
+        //                $(".chkContacts").prop("checked", false);
+
+
+        //            } else {
+        //                alert("Failed!");
+
+        //            }
+
+        //        }
+        //    });
+        //}
+
+
+        function BulkActions(action)
+        {
+
+            var contactIdList = null;
+            contactIdList = [];
+
+            $('input:checkbox:checked').each(function () {
+
+                if ($(this).parent().hasClass("chkContacts")) {
+
+                    contactIdList.push($(this).attr('value'));
+                }
+            });
+
+
+
+            $.ajax({
+                type: "post",
+                url: "/Contact/BulkActionOnContacts",
+                data: { "action": action, "contactIdList": contactIdList },
+                datatype: "json",
+                success: function (data) {
+
+                    if (data == "True") {
+                        location.reload();
+                        $(".chkContacts").prop("checked", false);
+
+
+                    } else {
+                             alert("Failed!");
+
+                    }
+
+                }
+            });
+
+            setTimeout(function () {
+                $('#display-success').fadeOut().text('');
+                $('#display-exist').fadeOut().text('');
+                //$('#display-error').fadeOut().text('');
+                //$('#display-delete').fadeOut().text('');
+            }, 3000);
+
+            }
+    </script>
+
+</head>
+@{ Html.EnableClientValidation(); }
+<body>
+    <div class="container fill">
+
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="row">
+                <div class="col-lg-pull-10">
+                    <label class="label-danger" id="display-error">
+                        @Html.ValidationMessage("Error")
+                    </label>
+                </div>
+            </div>
+
+        }
+        @if (TempData["message"] != null)
+        {
+            <div style="color:green" id="display-msg">@TempData["message"]</div>
+        }
+        @if (TempData["StoryAlreadyExist"] != null)
+        {
+            <div style="color:red" id="display-exist">@TempData["StoryAlreadyExist"]</div>
+        }
+        @if (TempData["storyMessage"] != null)
+        {
+            <div style="color:red" id="display-success">@TempData["storyMessage"]</div>
+        }
+        @if (TempData["multipleAction"] != null)
+        {
+            <div style="color:green" id="display-delete">@TempData["multipleAction"]</div>
+        }
+
+        <h2>Contacts</h2>
+        <div class="row">
+            <div class="pull-right">
+                <button type="button" id="btnAddStory" class="btn btn-default pull-right">Add Story</button>
+            </div>
+            <div class="pull-right">
+                <button type="button" id="btnEditStory" onclick="GetStoryById(45)" class="btn btn-default pull-right">Edit Story</button>
+            </div>
+        </div>
+        <br />
+        <table id="contactsGrid" data-source="@Url.Action("GetStories" )"></table>
+    </div>
+    @using (Html.BeginForm("Save", "Story", FormMethod.Post))
+    {
+        @Html.Hidden("hdnIsEdit", 1);
+        @*@Html.Hidden("hdnAction", "Published");*@
+        @Html.ValidationSummary(true)
+    <!-- Modal -->
+        <div class="modal fade" id="storyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="height: 150px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <label style="float:left">
+                            <span style="float:left" id="spanStoryHeading"></span>
+                        </label><label style="float:right">
+                            <button style='float:right' type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </label>
+                    </div>
+                    <div class="modal-body">
+
+                        @*For need to Maintain Design*@
+                        @*<form role="form" class='form-horizontal'></form>*@
+                        <div class='form-horizontal'>
+                            <div class="col-xs-12 col-sm-12">
+                                @*<form role="form" id="frmStory" class='form-horizontal'>*@
+                                @Html.HiddenFor(Model => Model.IsNew)
+                                @Html.HiddenFor(Model => Model.CreatedOnDateTime)
+                                <div hidden>
+                                    <label for="StoryId">Id</label>
+                                    @Html.TextBoxFor(Model => Model.StoryId, new { @class = "form-control", id = "StoryId" })
+                                    @Html.ValidationMessageFor(Model => Model.StoryId)
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="Title">*Title</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.TextBoxFor(Model => Model.Title, new { @onchange = "VisibleSaveDraft(this)", @class = "form-control", id = "Title" })
+                                        @Html.ValidationMessageFor(Model => Model.Title)
+                                    </div>
+                                </div>
+
+                                <div class="form-group" id="divStatus">
+                                    <div class="col-md-4">
+                                        <label for="StatusId">*Status</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(model => Model.StatusId, ViewData["StatusId"] as List<SelectListItem>, new { @class = "form-control" })@*style = "width: 200px;height:30px"*@
+                                        @Html.ValidationMessageFor(Model => Model.StatusId)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="SubmittedBy">Submitted By</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(Model => Model.SubmittedBy, new { @onchange = "VisibleSaveDraft(this)", @class = "form-control", id = "SubmittedBy", @readonly = "readonly", Value = @ViewData["SubmittedBy"] })
+                                        @Html.ValidationMessageFor(Model => Model.SubmittedBy)
+                                    </div>
+                                </div>
+                                <div class="form-group" id="divPublishedBy">
+                                    <div class="col-md-4">
+                                        <label for="PublishedBy">Published By</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(Model => Model.PublishedBy, new { @onchange = "VisibleSaveDraft(this)", @class = "form-control", id = "PublishedBy", @readonly = "readonly", Value = @ViewData["PublishedBy"] })
+                                        @Html.ValidationMessageFor(Model => Model.PublishedBy)
+                                    </div>
+                                </div>
+                                @*<div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="DatePosted">Date Posted</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        @Html.TextBoxFor(model => model.DatePosted, new { @class = "form-control ui-datepicker span11", @readonly = "readonly", @style = "display:block;float:left;" })
+                                        @Html.TextBoxFor(m => m.DatePosted, new { @class = "form-control datepicker", @type = "date" })
+                                        @Html.ValidationMessageFor(Model => Model.DatePosted)
+
+                                    </div>
+                                </div>*@
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="MediaTypeId">*Media Type</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(model => Model.MediaTypeId, ViewData["MediaTypeId"] as List<SelectListItem>, new { @class = "form-control" })@*style = "width: 200px;height:30px"*@
+                                        @Html.ValidationMessageFor(Model => Model.MediaTypeId)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="Source">*Source</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.DropDownListFor(model => Model.SourceId, ViewData["SourceId"] as List<SelectListItem>, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(Model => Model.SourceId)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="DateSrcPublished">*Date Src Published</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                        @Html.TextBoxFor(model => model.DateSrcPublished, new { @class = "form-control ui-datepicker span11", @readonly = "readonly", @style = "display:block;float:left;" })
+                                        @*@Html.TextBoxFor(m => m.DateSrcPublished, new { @class = "form-control datepicker", @type = "date" })*@
+                                        @Html.ValidationMessageFor(Model => Model.DateSrcPublished)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="StoryLink">*URL</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(Model => Model.StoryLink, new { @class = "form-control", id = "StoryLink" })
+                                        @Html.ValidationMessageFor(Model => Model.StoryLink)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="Author">*Author</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.EditorFor(Model => Model.Author, new { htmlAttributes = new { @onchange = "VisibleSaveDraft(this)", @class = "form-control", id = "Author" } })
+                                        @Html.ValidationMessageFor(Model => Model.Author)
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="Tags">*Tags</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        @Html.EditorFor(model => model.Tags, new { htmlAttributes = new { @onchange = "VisibleSaveDraft(this)", @class = "form-control", id = "Tags" } })
+                                        @Html.ValidationMessageFor(Model => Model.Tags)
+                                    </div>
+                                </div>
+                                @*<div class="form-group">
+                                    <div class="col-md-4">
+                                    <label for="LogLine">*LogLine</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                    @Html.TextBoxFor(Model => Model.LogLine, new { @onchange = "VisibleSaveDraft(this)", @class = "form-control", id = "LogLine" })
+                                    @Html.ValidationMessageFor(Model => Model.LogLine)
+                                    </div>
+                                    </div>*@
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="Synopsis">*Brief Synopsis</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        @Html.TextAreaFor(Model => Model.Synopsis, new { @onchange = "VisibleSaveDraft(this)", @class = "form-control", id = "Synopsis" })
+                                        @Html.ValidationMessageFor(Model => Model.Synopsis)
+                                    </div>
+                                </div>
+                                @Html.AntiForgeryToken()
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="MediaUrl">Upload Media</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="file" name="MediaUrlFile" id="MediaUrlFile" multiple /><br>
+                                        @Html.ValidationMessageFor(Model => Model.MediaUrl)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="FeatureOnHomepage">FeatureOnHomepage</label>
+                                    </div>
+                                    <div class="col-md-1">
+                                        @Html.CheckBoxFor(Model => Model.FeatureOnHomepage, new { @class = "form-control", id = "FeatureOnHomepage" })
+                                        @Html.ValidationMessageFor(Model => Model.FeatureOnHomepage)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <label for="FeaturedImage">*FeaturedImage</label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="file" name="FeaturedImageFile" id="FeaturedImageFile"><br>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div id="FeaturedImgBox">
+                                            <img width="80" height="80" alt="Image" /><input type="button" name="rep" id="replaceFeaturedImageFile" value="Replace"><br />
+                                            <input type="button" name="rem" id="removeFeaturedImageFile" value="Remove">
+                                        </div>
+
+                                        @Html.ValidationMessageFor(Model => Model.FeaturedImage)
+                                    </div>
+                                </div>
+
+
+                                @*<div class="form-group">                                  
+                                    <button type="button" id="btnAddComment" onclick="toggleArea1();" class="btn btn-default" style="background-color:white">Add a Comment</button>
+                                </div>*@
+
+                                @*@Html.AntiForgeryToken()*@
+                                @*</form>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <p>
+                            <button type="submit" value="Published" name="btnPublish" id="btnPublish" class="btn btn-primary">Approve & Publish</button>
+                            <button type="submit" value="Draft" name="btnSaveDraft" id="btnSaveDraft" class="btn btn-default">Save Changes</button>
+                            <button type="submit" value="Published" name="btnAddBanks" id="btnAddBanks" class="btn btn-default">Add to Bank</button>
+                            <button type="button" id="btnCancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                        </p>
+                        @*<h4>
+                            Comment
+                        </h4>
+                        <textarea name="area3" style="width: 300px; height: 100px;">
+       HTML content default in textarea
+</textarea>
+                        <button type="submit" value="AddComment" name="btnAddComment" id="btnAddComment" class="btn btn-primary">Add</button>
+                        <button type="button" id="btnCancelComment" class="btn btn-default" data-dismiss="modal">Cancel</button>*@
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="ImportModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" style="height: 150px;width:780px">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div>
+                            <input type="file" id="file">
+                            <input hidden="hidden" id="fileUrl">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-default" style="border: none; font-weight:bold;text-transform:uppercase;color:skyblue" id="btnImport">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+                                            }
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$("#btnPublish").css("visibility", "hidden");
+        //$("#btnDenyArchive").css("visibility", "hidden");
+
+        $("#btnAddStory").click(function () {
+            $("#btnPublish").css("display", "none");
+            $("#btnSaveDraft").css("display", "none");
+            return false;
+        });
+
+        //$("#ddlStatusId").change(function () {
+        //    var status = this.value;
+
+        //    if (status == "Published") {
+        //        $("#btnPublish").css("display", "block");
+        //        $("#btnDenyArchive").css("display", "none");
+        //    }
+        //    else if (status == "Hidden") {
+
+        //        $("#btnPublish").css("display", "none");
+        //        $("#btnDenyArchive").css("display", "none");
+        //    }
+        //    else if (status == "Archieved") {
+        //        $("#btnPublish").css("display", "none");
+        //        $("#btnDenyArchive").css("display", "block");
+        //    }
+        //    else {
+        //        $("#btnPublish").css("display", "none");
+        //        $("#btnDenyArchive").css("display", "none");
+        //    }
+
+        //    return false;
+        //});
+
+        //validate();
+        //$('#firstName, #lastName, #email,#cellPhone,#officePhone,#Notes').change(validate);
+    });
+
+    //function validate() {
+    //    $('#Title, #SubmittedBy, #DatePosted,#MediaTypeId,#SourceId,#DateSrcPublished,#StoryLink,#Author,#Tags,#Synopsis,#FeatureOnHomepage').change(validate);
+    //    if ($('#Title').val().length > 0 &&
+    //        $('#SubmittedBy').val().length > 0 &&
+    //        //$('#DatePosted').val().length > 0 &&
+    //        $('#MediaTypeId').val().length > 0 &&
+    //        $('#SourceId').val().length > 0 &&
+    //        $('#DateSrcPublished').val().length > 0 &&
+    //        $('#StoryLink').val().length > 0 &&
+    //        $('#Author').val().length > 0 &&
+    //        $('#Tags').val().length > 0 &&
+    //        //$('#LogLine').val().length > 0 &&
+    //        $('#Synopsis').val().length > 0 &&
+    //        document.getElementById("MediaUrlFile").files.length &&
+    //        document.getElementById("FeaturedImageFile").files.length) {
+    //        // $("#btnSave").prop("disabled", false);
+    //        $("#btnSave").css("display", "block");
+    //    }
+    //    else {
+    //        //$("#btnSave").prop("disabled", true);
+    //        $("#btnSave").css("display", "none");
+    //    }
+    //}
+
+
+    function VisibleSaveDraft(obj) {
+        if (obj.value != undefined && obj.value != "".trim()) {
+            $("#btnSaveDraft").css("display", "inline-block");
+            if ($("#StoryId").val() =="")
+                $("#btnPublish").css("display", "inline-block");
+            return true;
+        }
+        $("#btnSaveDraft").css("display", "none");
+        $("#btnPublish").css("display", "none");
+    }
+
+</script>
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('.ui-datepicker').each(function (i, v) {
+
+            $(".ui - datepicker").val(" ");
+            //$(v).val($.datepicker.formatDate('dd-M-yy', new Date($(v).val())));
+            $(v).datepicker({
+                dateFormat: 'dd-M-yy',
+                buttonImage: '@Url.Content("~/Content/calendar.gif")',
+                buttonImageOnly: true,
+                showOn: "button"
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $("#Author").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Story/Index",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Author, value: item.Author};
+                        }))
+                    }
+                })
+            },
+            messages: {
+                noResults: "",
+                results: function (count) {
+                    return count + (count > 1 ? ' results' : ' result ') + ' found';
+                }
+            }
+        });
+
+        $("#Tags").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/Story/Index",
+                    type: "POST",
+                    dataType: "json",
+                    data: { Prefix: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.Author, value: item.Author };
+                        }))
+                    }
+                })
+            },
+            messages: {
+                noResults: "",
+                results: function (count) {
+                    return count + (count > 1 ? ' results' : ' result ') + ' found';
+                }
+            }
+        });
+    })
+</script>

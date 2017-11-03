@@ -1,0 +1,95 @@
+// Creating margins paddings
+$spaceamounts: (5, 10, 15, 20, 25, 30, 35, 40, 45, 50);
+
+@mixin generate-margin-bottom() {
+  @each $space in $spaceamounts {
+    .mb-#{$space} {
+      margin-bottom: #{$space}px;
+    }
+  }
+}
+
+@mixin generate-margin-top() {
+  @each $space in $spaceamounts {
+    .mt-#{$space} {
+      margin-top: #{$space}px;
+    }
+  }
+}
+@mixin generate-padding-top() {
+  @each $space in $spaceamounts {
+    .pt-#{$space} {
+      padding-top: #{$space}px;
+    }
+  }
+}
+@mixin generate-padding-bottom() {
+  @each $space in $spaceamounts {
+    .pb-#{$space} {
+      padding-bottom: #{$space}px;
+    }
+  }
+}
+@mixin generate-padding-all() {
+  @each $space in $spaceamounts {
+    .p-#{$space} {
+      padding: #{$space}px;
+    }
+  }
+}
+
+// CSS3 PROPERTIES
+// --------------------------------------------------
+
+// Single side border-radius
+@mixin border-top-radius($radius) {
+  border-top-right-radius: $radius;
+   border-top-left-radius: $radius;
+}
+@mixin border-right-radius($radius) {
+  border-bottom-right-radius: $radius;
+     border-top-right-radius: $radius;
+}
+@mixin border-bottom-radius($radius) {
+  border-bottom-right-radius: $radius;
+   border-bottom-left-radius: $radius;
+}
+@mixin border-left-radius($radius) {
+  border-bottom-left-radius: $radius;
+     border-top-left-radius: $radius;
+}
+
+// Border radius
+@mixin border-radius($radius) {
+  border-radius: $radius;
+}
+
+
+@mixin btn-filled-border($btn-filled-bg-color, $btn-filled-border-color) {
+  background-color: $btn-filled-bg-color;
+  border: 1px solid $btn-filled-border-color;
+  color: $btn-filled-border-color;
+  position: relative;
+  
+  &:before {
+    position: absolute;
+    content: '';
+    left: -5px;
+    top: -5px;
+    padding: 10px;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    background-color: $btn-filled-bg-color;
+    z-index: -1;
+  }
+
+  &:hover,
+  &:active {
+    background-color: lighten($btn-filled-bg-color, 10%);
+    color: $btn-filled-border-color;
+
+    &:before {
+      background-color: lighten($btn-filled-bg-color, 10%);
+    }
+  }
+}

@@ -1,0 +1,56 @@
+.modal-backdrop {
+  &.in {
+    opacity: 0.67;
+  }
+}
+
+.custom-modal {
+  top: 5%;
+
+  .modal-content {
+    @include border-radius (0);
+    border: none;
+    
+    .modal-header {
+      border-bottom: none;
+      background: $primary-color;
+      
+      .close {
+        opacity: 1;
+        font-size: 1.8em;
+        top: -30px;
+        right: -20px;
+        position: absolute;
+        color: $white-color;
+      }
+      
+      .modal-title {
+        font-weight: 400;
+        text-align: center;
+        font-size: 1.875em;
+        margin-top: 20px;
+      }
+    }
+    
+    .modal-full-msg {
+      text-align: center;
+      margin: 15px 17%;
+    }
+    
+    .modal-body {
+      padding: 30px;
+
+      h2 {
+        &.margin-none {
+          margin: 0;
+        }
+      }
+    }
+
+    .modal-footer {
+      border-top: none;
+      padding: 0 30px 30px 30px;
+    }
+    
+  }
+}
