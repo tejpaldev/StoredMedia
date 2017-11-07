@@ -8,7 +8,7 @@ namespace StoreyedMedia.DAL.Mappers
     {
 
         #region Variables
-         
+
         private int _ordinalTagId;
         private int _ordinalTag;
         private int _ordinalTagType;
@@ -17,7 +17,7 @@ namespace StoreyedMedia.DAL.Mappers
         private int _ordinalCategory;
 
         private bool _isInitialized = false;
-         
+
         #endregion
 
         private void InitializeMapper(IDataReader reader)
@@ -28,11 +28,15 @@ namespace StoreyedMedia.DAL.Mappers
 
         public void PopulateOrdinals(IDataReader reader)
         {
+            _ordinalTagId = ColumnExists(reader, "TagId") ? reader.GetOrdinal("TagId") : CommonBase.NonExistantOrdinal;
 
-            _ordinalTagId = reader.GetOrdinal("TagId");
-            _ordinalTag = reader.GetOrdinal("Tag");
-            _ordinalTagType = reader.GetOrdinal("TagType");
-            _ordinalCategory = reader.GetOrdinal("Category");
+            _ordinalTag = ColumnExists(reader, "Tag") ? reader.GetOrdinal("Tag") : CommonBase.NonExistantOrdinal;
+
+            _ordinalTagType = ColumnExists(reader, "TagType") ? reader.GetOrdinal("TagType") : CommonBase.NonExistantOrdinal;
+
+            _ordinalCategory = ColumnExists(reader, "Category") ? reader.GetOrdinal("Category") : CommonBase.NonExistantOrdinal;
+
+            _ordinalCategoryId = ColumnExists(reader, "CategoryId") ? reader.GetOrdinal("CategoryId") : CommonBase.NonExistantOrdinal;
         }
 
         private static bool ColumnExists(IDataReader reader, string columnName)
@@ -48,16 +52,22 @@ namespace StoreyedMedia.DAL.Mappers
 
         public Object GetData(IDataReader reader)
         {
-            
+
             if (!_isInitialized) { InitializeMapper(reader); }
-            
+
             Tags dto = new Tags();
             //load the data 
-            if (!reader.IsDBNull(_ordinalTagId)) { dto.TagId = reader.GetInt32(_ordinalTagId); }
-            if (!reader.IsDBNull(_ordinalTag)) { dto.Tag = reader.GetString(_ordinalTag); }
-            if (!reader.IsDBNull(_ordinalTagType)) { dto.TagType = reader.GetString(_ordinalTagType); }
-            if (!reader.IsDBNull(_ordinalCategory)) { dto.Category = reader.GetString(_ordinalCategory); }
-            return dto; 
+            if (CommonBase.NonExistantOrdinal != _ordinalTagId && !reader.IsDBNull(_ordinalTagId)) { dto.TagId = reader.GetInt32(_ordinalTagId); }
+
+            if (CommonBase.NonExistantOrdinal != _ordinalTag && !reader.IsDBNull(_ordinalTag)) { dto.Tag = reader.GetString(_ordinalTag); }
+
+            if (CommonBase.NonExistantOrdinal != _ordinalTagType && !reader.IsDBNull(_ordinalTagType)) { dto.TagType = reader.GetString(_ordinalTagType); }
+
+            if (CommonBase.NonExistantOrdinal != _ordinalCategory && !reader.IsDBNull(_ordinalCategory)) { dto.Category = reader.GetString(_ordinalCategory); }
+
+            if (CommonBase.NonExistantOrdinal != _ordinalCategoryId && !reader.IsDBNull(_ordinalCategoryId)) { dto.CategoryId = reader.GetInt32(_ordinalCategoryId); }
+
+            return dto;
         }
 
         public int GetRecordCount(IDataReader reader)

@@ -16,22 +16,35 @@ namespace StoreyedMedia.Infrastructure
 
         #region Constants
 
-        static string bucketName = "storied-medias"; 
+        static string bucketName = "storied-medias";
+
+        static string imageAccessUrl = "https://storied-medias.s3.amazonaws.com/";
+
 
         #endregion
 
-        public static bool FileUpload(HttpPostedFileBase file,string key)
+        public static bool FileUpload(HttpPostedFileBase file, string key, string subDirectoryInBucket = null)
         {
             Stream localFile = file.InputStream;
+            string directoryPath = string.Empty;
+
+            if (subDirectoryInBucket == "" || subDirectoryInBucket == null)
+            {
+                directoryPath = bucketName; //no subdirectory just bucket name
+            }
+            else
+            {   // subdirectory and bucket name
+                directoryPath = bucketName + @"/" + subDirectoryInBucket;
+            }
 
             string name = Path.GetFileName(file.FileName);
-            string myBucketName = bucketName; //your s3 bucket name   
-            string s3DirectoryName = String.Empty;
-            string s3FileName = @name; 
-            return SendFileToS3(localFile, myBucketName, s3DirectoryName, key);
+            string myBucketName = directoryPath; //your s3 bucket name    
+            string s3FileName = @name;
+            string contentType = "image/jpeg";
+            return SendFileToS3(localFile, contentType, myBucketName, key);
         }
 
-        private static bool SendFileToS3(System.IO.Stream localFile , string bucketName, string subDirectoryInBucket, string keyInS3)
+        private static bool SendFileToS3(System.IO.Stream localFile, string contentType, string bucketName, string keyInS3)
         {
             bool status = false;
             var client = new AmazonS3Client(Amazon.RegionEndpoint.USEast1);
@@ -40,15 +53,16 @@ namespace StoreyedMedia.Infrastructure
             {
                 PutObjectRequest putRequest = new PutObjectRequest
                 {
-                    InputStream= localFile ,
+                    InputStream = localFile,
                     BucketName = bucketName,
-                    Key = keyInS3, 
-                    ContentType = "text/plain"
+                    Key = keyInS3,
+                    ContentType = contentType
+
                 };
 
                 PutObjectResponse response = client.PutObject(putRequest);
-                
-                status = response.HttpStatusCode.ToString()  == "OK"? true : false;
+
+                status = response.HttpStatusCode.ToString() == "OK" ? true : false;
             }
             catch (AmazonS3Exception amazonS3Exception)
             {
@@ -65,7 +79,7 @@ namespace StoreyedMedia.Infrastructure
                 }
             }
 
-            return status; 
+            return status;
         }
 
         public static bool IsValidGuid(string str)
@@ -74,22 +88,37 @@ namespace StoreyedMedia.Infrastructure
             return Guid.TryParse(str, out guid);
         }
 
-        public static string GetFileFromS3(string keyInS3)
+        public static string GetFileFromS3(string keyInS3, string directoryPath = null)
         {
             String url = string.Empty;
-            var client = new AmazonS3Client(Amazon.RegionEndpoint.USEast1);
+            //var client = new AmazonS3Client(Amazon.RegionEndpoint.USEast1);
+
+
+            //    GetPreSignedUrlRequest request = new GetPreSignedUrlRequest()
+            //    {
+            //        BucketName = bucketName + @"/" + directoryPath,
+            //        Key = keyInS3,
+            //        Expires = DateTime.Now.AddMinutes(15)
+            //    };
+
+            //    url = client.GetPreSignedURL(request);
+
 
             try
             {
 
-                GetPreSignedUrlRequest request = new GetPreSignedUrlRequest()
+                if (!string.IsNullOrEmpty(directoryPath))
                 {
-                    BucketName = bucketName,
-                    Key = keyInS3,
-                    Expires = DateTime.Now.AddMinutes(15)
-                };
+                    url = imageAccessUrl + directoryPath + "/" + keyInS3;
+                }
+                else
+                {   // subdirectory and bucket name
+                    url = imageAccessUrl + keyInS3;
+                }
 
-                url = client.GetPreSignedURL(request);
+                // url = imageAccessUrl  + keyInS3;
+
+
 
             }
             catch (AmazonS3Exception amazonS3Exception)
@@ -112,10 +141,10 @@ namespace StoreyedMedia.Infrastructure
 
 
         public static string KeyGenerator()
-        { 
+        {
             Guid guId;
             guId = Guid.NewGuid();
-            return guId.ToString(); 
+            return guId.ToString();
         }
     }
 }

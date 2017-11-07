@@ -16,7 +16,7 @@ namespace StoreyedMedia.DAL
         /// Get Tags
         /// </summary>
         /// <returns></returns>
-        public List<Tags> GetAllTags(int categoryId,int pageNumber, int pageSize, string orderByClause)
+        public List<Tags> GetAllTags(int categoryId, int pageNumber, int pageSize, string orderByClause)
         {
 
             SqlCommand command = GetDbSprocCommand("GetAllTags");

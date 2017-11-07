@@ -120,7 +120,30 @@ namespace StoreyedMedia.Web.Controllers
             return Json(story, JsonRequestBehavior.AllowGet);
         }
 
+
         [HttpPost]
+        public JsonResult GetComments(int sId)
+        {
+            Comment comment = new Comment();
+            comment = _service.GetComments(sId);
+            return Json(comment, JsonRequestBehavior.AllowGet);
+        }
+	
+	
+	        [HttpPost]
+	        [ValidateInput(false)]
+	        public JsonResult AddComment(int storyId, string description)
+	        {
+            //Story story = new Story();
+            var a = _service.AddComment(storyId, description);
+            //story.SubmittedBy = CommonBase.LoggedInUser1;
+	            //story.PublishedBy = CommonBase.LoggedInUser1;
+	            //story.SubmittedById = CommonBase.LoggedInUserId;
+	            //story.PublishedById= CommonBase.LoggedInUserId1;
+            return Json(a, JsonRequestBehavior.AllowGet);
+        }
+
+         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save(Story story, List<HttpPostedFileBase> mediaUrlFile, HttpPostedFileBase featuredImageFile)
         {

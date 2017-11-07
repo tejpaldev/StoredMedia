@@ -22,6 +22,7 @@ namespace StoreyedMedia.Web.Controllers
         #region Constructor
 
         readonly StoreyedMedia.BAL.TagsBal _service;
+        readonly StoreyedMedia.BAL.CategoriesBal _service1;
 
         /// <summary>
         /// initialize service in constructor
@@ -29,6 +30,7 @@ namespace StoreyedMedia.Web.Controllers
         public TagsController()
         {
             _service = new StoreyedMedia.BAL.TagsBal();
+            _service1 = new BAL.CategoriesBal();
 
         }
 
@@ -53,6 +55,7 @@ namespace StoreyedMedia.Web.Controllers
         {
             TempData["CategoryId"] = categoryId;
             CategoryId = categoryId;
+            ViewData["CategoryId"] = GetAllCategoriesForTags();
             return Index();
         }
 
@@ -98,6 +101,7 @@ namespace StoreyedMedia.Web.Controllers
                 tags.TagType = "Genres";
             }
             Tags result = _service.EditTag(tags);
+            ViewData["CategoryId"] = GetAllCategoriesForTags();
             return Index();
 
         }
@@ -113,6 +117,15 @@ namespace StoreyedMedia.Web.Controllers
             var result = _service.DeleteTag(TagId);
             TempData["deleteTag"] = "Tag has been deleted";
             return Json(Content(result.ToString(), ContentType));
+        }
+
+        private SelectList GetAllCategoriesForTags()
+        {
+            List<Categories> lstCategories = new List<Categories>();
+            int total = _service1.GetTotalCategoriesCount();
+            lstCategories = _service1.GetAllCategories(1, total, out total, null);
+            SelectList categoryList = new SelectList(lstCategories, "CategoryId", "Category");
+            return categoryList;
         }
 
         #endregion

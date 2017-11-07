@@ -54,6 +54,6 @@ namespace StoreyedMedia.Model
         public DataTable UploadMediaUrlList { get; set; }
         public string MediaUrl { get; set; }
 
-        public string Comment { get; set; }
+        public string CommentDesc { get; set; }
     }
 }

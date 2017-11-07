@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StoreyedMedia.Model
 {
-    public class Tags:ModelBase
+    public class Tags : ModelBase
     {
         public int SearchId { get; set; }
         public int TagId { get; set; }

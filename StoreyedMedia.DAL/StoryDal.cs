@@ -172,6 +172,51 @@ namespace StoreyedMedia.DAL
             return GetSingleDto<Story>(ref command);
         }
 
+
+        public Comment GetComments(int id)
+        {
+            SqlCommand command = GetDbSprocCommand("GetStoryById");
+            command.Parameters.Add(CreateParameter("@StoryId", id));
+            return GetSingleDto<Comment>(ref command);
+	    }
+
+        public int AddComment(int storyId, string description)
+        {
+          SqlCommand command = GetDbSprocCommand("SaveComments");
+            command.Parameters.Add(CreateParameter("@storyId", storyId));
+            command.Parameters.Add(CreateParameter("@Description", description, 40));
+
+           int result = 0;
+            try
+	            {
+                command.Connection.Open();
+
+	                SqlDataReader reader = command.ExecuteReader();
+	                if (reader.HasRows)
+	                {
+	                    reader.Read();
+	                    if (!reader.IsDBNull(0))
+	                    {
+	                        result = Convert.ToInt32(reader["StatusId"]);
+                    }
+	                    reader.Close();
+                }
+	
+	            }
+	            catch (Exception e)
+	            {
+	                throw new Exception("Error populating data", e);
+	            }
+	            finally
+                {
+                command.Connection.Close();
+	                command.Connection.Dispose();
+               }
+	            return result;
+	
+	    }
+
+
         public int GetStatus(string action)
         {
             SqlCommand command = GetDbSprocCommand("GetSaveTypeStatus");

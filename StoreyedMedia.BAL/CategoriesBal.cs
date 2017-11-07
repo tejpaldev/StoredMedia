@@ -15,6 +15,7 @@ namespace StoreyedMedia.BAL
         #region Constants
 
         private readonly CategoriesDal _Categories;
+        string bucketName = "Category";
 
 
         #endregion
@@ -40,7 +41,7 @@ namespace StoreyedMedia.BAL
             List<Categories> lstCategory = _Categories.GetAllCategories(pageNumber, pageSize, orderByClause);
             foreach (var category in lstCategory)
             {
-                category.IconUrl = S3Cloud.IsValidGuid(category.IconUrl) ? S3Cloud.GetFileFromS3(category.IconUrl) : string.Empty;
+                category.IconUrl = S3Cloud.IsValidGuid(category.IconUrl) ? S3Cloud.GetFileFromS3(category.IconUrl, bucketName) : string.Empty;
                 //category.IconUrl = S3Cloud.GetFileFromS3(category.IconUrl);
             }
             return lstCategory;
@@ -90,7 +91,7 @@ namespace StoreyedMedia.BAL
         private bool SaveImageToCloud(HttpPostedFileBase file, string key)
         {
 
-            return S3Cloud.FileUpload(file, key);
+            return S3Cloud.FileUpload(file, key, bucketName);
 
         }
         #endregion

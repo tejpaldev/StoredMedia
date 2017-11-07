@@ -160,9 +160,9 @@ namespace StroreyedMedia.BAL
         /// </summary>
         /// <param name="StoryId"></param>
         /// <returns></returns>
-        public int IsStoryExist(string title,string storyLink)
+        public int IsStoryExist(string title, string storyLink)
         {
-            int isStoryExist = _Story.IsStoryExist(title,storyLink);
+            int isStoryExist = _Story.IsStoryExist(title, storyLink);
             return isStoryExist;
         }
 
@@ -222,6 +222,19 @@ namespace StroreyedMedia.BAL
             return editStoryStatus;
         }
 
+
+        public Comment GetComments(int id)
+        {
+            Comment results = _Story.GetComments(id);
+            return results;
+        }
+
+        public int AddComment(int storyId, string description)
+        {
+            int results = _Story.AddComment(storyId, description);
+            return results;
+        }
+    
         #endregion
 
         #region Private Methods

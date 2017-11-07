@@ -22,6 +22,8 @@ namespace StoreyedMedia.DAL.Mappers
                     return new CategoriesMapper();
                 case "Media":
                     return new MediaMapper();
+                case "Comment":
+                    return new CommentMapper();
                 default:
                     return new ContactMapper();
             }
