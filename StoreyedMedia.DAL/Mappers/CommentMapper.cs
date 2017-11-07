@@ -13,7 +13,7 @@ namespace StoreyedMedia.DAL.Mappers
         private int _ordinalCommentId;
         private int _ordinalStoryId;
         private int _ordinalCommentDesc;
-       
+
         private bool _isInitialized = false;
 
         #endregion
@@ -26,9 +26,9 @@ namespace StoreyedMedia.DAL.Mappers
 
         public void PopulateOrdinals(IDataReader reader)
         {
-            _ordinalCommentId = ColumnExists(reader, "CommentId") ? reader.GetOrdinal("CommentId") : CommonBase.NonExistantOrdinal;
+            _ordinalCommentId = ColumnExists(reader, "Id") ? reader.GetOrdinal("Id") : CommonBase.NonExistantOrdinal;
             _ordinalStoryId = ColumnExists(reader, "StoryId") ? reader.GetOrdinal("StoryId") : CommonBase.NonExistantOrdinal;
-            _ordinalCommentDesc = ColumnExists(reader, "CommentDesc") ? reader.GetOrdinal("CommentDesc") : CommonBase.NonExistantOrdinal;
+            _ordinalCommentDesc = ColumnExists(reader, "Description") ? reader.GetOrdinal("Description") : CommonBase.NonExistantOrdinal;
         }
 
         private static bool ColumnExists(IDataReader reader, string columnName)

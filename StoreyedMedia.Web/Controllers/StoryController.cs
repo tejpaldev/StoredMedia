@@ -7,6 +7,7 @@ using StoreyedMedia.Infrastructure;
 using StoreyedMedia.Model;
 using StoreyedMedia.BAL;
 using StroreyedMedia.BAL;
+using System.Text;
 
 namespace StoreyedMedia.Web.Controllers
 {
@@ -124,26 +125,59 @@ namespace StoreyedMedia.Web.Controllers
         [HttpPost]
         public JsonResult GetComments(int sId)
         {
-            Comment comment = new Comment();
+            List<Comment> comment = new List<Comment>();
             comment = _service.GetComments(sId);
-            return Json(comment, JsonRequestBehavior.AllowGet);
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < comment.Count; i++)
+            {
+                sb.Append(comment[i].CommentDesc);
+                sb.Append("</br>");
+            }
+            //Comment cmt = new Comment();
+            //cmt.StoryId = 38;
+            //cmt.CommentDesc = " test  test  test  test  test  test  test  test  test  test  test  test  test  test  test  test test";
+            //cmt.CommentId = 1;
+            //sb.Append(cmt.CommentDesc);
+            //cmt.StoryId = 38;
+            //cmt.CommentDesc = " test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1 ";
+            //cmt.CommentId = 2;
+            //sb.Append("</br>");
+            //sb.Append(cmt.CommentDesc);
+            //cmt.StoryId = 38;
+            //cmt.CommentDesc = " test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2 ";
+            //cmt.CommentId = 3;
+
+            //sb.Append("</br>");
+            //sb.Append(cmt.CommentDesc);
+
+            //cmt.StoryId = 38;
+            //cmt.CommentDesc = " test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3 ";
+            //cmt.CommentId = 4;
+            ////comment = new List<Comment>
+            ////comment.Add(cmt);
+
+            //sb.Append("</br>");
+            //sb.Append(cmt.CommentDesc);
+
+            return Json(sb.ToString(), JsonRequestBehavior.AllowGet);
         }
-	
-	
-	        [HttpPost]
-	        [ValidateInput(false)]
-	        public JsonResult AddComment(int storyId, string description)
-	        {
+
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public JsonResult AddComment(int storyId, string description)
+        {
             //Story story = new Story();
             var a = _service.AddComment(storyId, description);
             //story.SubmittedBy = CommonBase.LoggedInUser1;
-	            //story.PublishedBy = CommonBase.LoggedInUser1;
-	            //story.SubmittedById = CommonBase.LoggedInUserId;
-	            //story.PublishedById= CommonBase.LoggedInUserId1;
+            //story.PublishedBy = CommonBase.LoggedInUser1;
+            //story.SubmittedById = CommonBase.LoggedInUserId;
+            //story.PublishedById= CommonBase.LoggedInUserId1;
             return Json(a, JsonRequestBehavior.AllowGet);
         }
 
-         [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save(Story story, List<HttpPostedFileBase> mediaUrlFile, HttpPostedFileBase featuredImageFile)
         {
@@ -184,15 +218,15 @@ namespace StoreyedMedia.Web.Controllers
                 story.SubmittedById = CommonBase.LoggedInUserId;
                 //story.DatePosted = DateTime.Now.Date;
                 int isStoryExist = 0;
-                    if (story.Title != null && story.StoryLink != null)
+                if (story.Title != null && story.StoryLink != null)
                     isStoryExist = _service.IsStoryExist(story.Title, story.StoryLink);
-                    if (isStoryExist > 0)
-                        TempData["StoryAlreadyExist"] = "This Story has already been added to the system";
-                    else
-                    {
-                        result = _service.EditStory(story, null, null, mediaUrlFile, featuredImageFile, tagIdList);
-                        TempData["storyMessage"] = "Story has been added successfully";
-                    }
+                if (isStoryExist > 0)
+                    TempData["StoryAlreadyExist"] = "This Story has already been added to the system";
+                else
+                {
+                    result = _service.EditStory(story, null, null, mediaUrlFile, featuredImageFile, tagIdList);
+                    TempData["storyMessage"] = "Story has been added successfully";
+                }
             }
             else
             {

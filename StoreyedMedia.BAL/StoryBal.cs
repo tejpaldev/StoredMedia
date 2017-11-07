@@ -223,9 +223,9 @@ namespace StroreyedMedia.BAL
         }
 
 
-        public Comment GetComments(int id)
+        public List<Comment> GetComments(int id)
         {
-            Comment results = _Story.GetComments(id);
+            List<Comment> results = _Story.GetComments(id);
             return results;
         }
 

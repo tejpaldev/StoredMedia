@@ -97,12 +97,12 @@ namespace StoreyedMedia.DAL
         public int IsStoryExist(string title, string storyLink)
         {
             SqlCommand command = GetDbSprocCommand("IsStoryExist");
-            command.Parameters.Add(CreateParameter("@Title", title,500));
-            command.Parameters.Add(CreateParameter("@StoryLink", storyLink,50));
+            command.Parameters.Add(CreateParameter("@Title", title, 500));
+            command.Parameters.Add(CreateParameter("@StoryLink", storyLink, 50));
             SqlParameter parm3 = new SqlParameter("@IsExists", SqlDbType.Int);
             parm3.Direction = ParameterDirection.Output;
             command.Parameters.Add(parm3);
-            int result=0;
+            int result = 0;
             try
             {
                 command.Connection.Open();
@@ -173,48 +173,48 @@ namespace StoreyedMedia.DAL
         }
 
 
-        public Comment GetComments(int id)
+        public List<Comment> GetComments(int id)
         {
-            SqlCommand command = GetDbSprocCommand("GetStoryById");
+            SqlCommand command = GetDbSprocCommand("GetComments");
             command.Parameters.Add(CreateParameter("@StoryId", id));
-            return GetSingleDto<Comment>(ref command);
-	    }
+            return GetDtoList<Comment>(ref command);
+        }
 
         public int AddComment(int storyId, string description)
         {
-          SqlCommand command = GetDbSprocCommand("SaveComments");
+            SqlCommand command = GetDbSprocCommand("SaveComments");
             command.Parameters.Add(CreateParameter("@storyId", storyId));
             command.Parameters.Add(CreateParameter("@Description", description, 40));
 
-           int result = 0;
+            int result = 0;
             try
-	            {
+            {
                 command.Connection.Open();
 
-	                SqlDataReader reader = command.ExecuteReader();
-	                if (reader.HasRows)
-	                {
-	                    reader.Read();
-	                    if (!reader.IsDBNull(0))
-	                    {
-	                        result = Convert.ToInt32(reader["StatusId"]);
-                    }
-	                    reader.Close();
-                }
-	
-	            }
-	            catch (Exception e)
-	            {
-	                throw new Exception("Error populating data", e);
-	            }
-	            finally
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
                 {
+                    reader.Read();
+                    if (!reader.IsDBNull(0))
+                    {
+                        result = Convert.ToInt32(reader["StatusId"]);
+                    }
+                    reader.Close();
+                }
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error populating data", e);
+            }
+            finally
+            {
                 command.Connection.Close();
-	                command.Connection.Dispose();
-               }
-	            return result;
-	
-	    }
+                command.Connection.Dispose();
+            }
+            return result;
+
+        }
 
 
         public int GetStatus(string action)
@@ -365,7 +365,7 @@ namespace StoreyedMedia.DAL
                     while (reader.Read())
                     {
                         Story s = new Story();
-                        s.StatusId=Convert.ToInt32(reader["StatusId"]);
+                        s.StatusId = Convert.ToInt32(reader["StatusId"]);
                         s.Status = Convert.ToString(reader["Status"]);
                         lstStory.Add(s);
                     }
