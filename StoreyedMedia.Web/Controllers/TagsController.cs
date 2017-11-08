@@ -69,7 +69,7 @@ namespace StoreyedMedia.Web.Controllers
             int total = 0;
             string orderByClause = sortBy + " " + direction;
             int categoryId = CategoryId;
-            List<Tags> records = _service.GetAllTags(categoryId, page, limit, out total, orderByClause);
+            List<Tags> records = _service.GetAllTagsByCategoryId(categoryId, page, limit, out total, orderByClause);
             if (records != null && records[0].Category != null)
                 TempData["Category"] = records[0].Category;
             else

@@ -180,11 +180,12 @@ namespace StoreyedMedia.DAL
             return GetDtoList<Comment>(ref command);
         }
 
-        public int AddComment(int storyId, string description)
+        public int AddComment(int storyId, string description,string CreatedBy)
         {
             SqlCommand command = GetDbSprocCommand("SaveComments");
             command.Parameters.Add(CreateParameter("@storyId", storyId));
             command.Parameters.Add(CreateParameter("@Description", description, 40));
+            command.Parameters.Add(CreateParameter("@CreatedBy", CreatedBy, 50));
 
             int result = 0;
             try

@@ -13,18 +13,29 @@ namespace StoreyedMedia.DAL
     {
         #region Repository Methods 
         /// <summary>
-        /// Get Tags
+        /// Get Tags By CategoryId
         /// </summary>
         /// <returns></returns>
-        public List<Tags> GetAllTags(int categoryId, int pageNumber, int pageSize, string orderByClause)
+        public List<Tags> GetAllTagsByCategoryId(int categoryId, int pageNumber, int pageSize, string orderByClause)
         {
 
-            SqlCommand command = GetDbSprocCommand("GetAllTags");
+            SqlCommand command = GetDbSprocCommand("GetAllTagsByCategoryId");
             command.Parameters.Add(CreateParameter("@CategoryId", categoryId));
             command.Parameters.Add(CreateParameter("@PageNumber", pageNumber));
             command.Parameters.Add(CreateParameter("@PageSize", pageSize));
             command.Parameters.Add(CreateParameter("@OrderByClause", orderByClause, 20));
 
+            return GetDtoList<Tags>(ref command);
+        }
+
+        /// <summary>
+        /// Get Tags
+        /// </summary>
+        /// <returns></returns>
+        public List<Tags> GetAllTags()
+        {
+
+            SqlCommand command = GetDbSprocCommand("GetAllTags");
             return GetDtoList<Tags>(ref command);
         }
 

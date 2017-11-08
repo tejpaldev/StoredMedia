@@ -62,7 +62,8 @@
             $("#divStatus").css("display", "none");
             $("#btnPublish").css("display", "none");
             $("#btnSaveDraft").css("display", "none");
-            $("#btnAddBanks").css("display", "inline-block");
+            $("#btnAddBanks").css("display", "inline-block"); 
+            $("#dvBindCommentBorder").css("display", "none");
         }
         function CreateAlert() {
 
@@ -247,9 +248,7 @@
             $("#btnPublish").css("display", "none");
             $("#btnSaveDraft").css("display", "inline-block");
             $("#btnAddBanks").css("display", "none");
-            //$("#btnAddComment").css("display", "inline-block");
-            //$("#btnCancelComment").css("display", "inline-block");
-            //$("#commentTextArea").css("display", "inline-block");
+            $("#dvBindCommentBorder").css("display", "inline-block"); 
             $('#storyModal').modal({ backdrop: 'static', keyboard: false }, 'show');
             if (e.FeaturedImage == null || e.FeaturedImage == '') {
                 $("#FeaturedImageFile").css("display", "block");
@@ -399,7 +398,7 @@
                 <button type="button" id="btnAddStory" class="btn btn-default pull-right">Add Story</button>
             </div>
             <div class="pull-right">
-                <button type="button" id="btnEditStory" onclick="GetStoryById(38)" class="btn btn-default pull-right">Edit Story</button>
+                <button type="button" id="btnEditStory" onclick="GetStoryById(45)" class="btn btn-default pull-right">Edit Story</button>
             </div>
         </div>
         <br />
@@ -600,7 +599,7 @@
                                         @Html.ValidationMessageFor(Model => Model.FeaturedImage)
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="dvBindCommentBorder">
                                     <hr />
                                     <div id="dvBindComment">
 
@@ -608,7 +607,7 @@
                                     <hr />
                                 </div>
                                 <button type="button" id="btnAddCommentPopup" class="btn btn-default" data-dismiss="modal">Add a Comment</button>
-                                <div id="dvComments" style="display:none;">
+                                @*<div id="dvComments" style="display:none;">
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.CommentDesc, htmlAttributes: new { @class = "control-label col-md-2" })
                                         <div ass="col-md-10">
@@ -624,9 +623,8 @@
                                         <button type="button" id="btnCancelComment" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                     </div>
 
-                                </div>
-                                @*@Html.AntiForgeryToken()*@
-                                @*</form>*@
+                                </div>*@
+                                
                             </div>
                         </div>
                     </div>
@@ -637,14 +635,23 @@
                             <button type="submit" value="Published" name="btnAddBanks" id="btnAddBanks" class="btn btn-default">Add to Bank</button>
                             <button type="button" id="btnCancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </p>
-                        @*<h4>
-                                                        Comment
-                                                    </h4>
-                                                    <textarea name="area3" style="width: 300px; height: 100px;">
-                                   HTML content default in textarea
-                            </textarea>
-                                                    <button type="submit" value="AddComment" name="btnAddComment" id="btnAddComment" class="btn btn-primary">Add</button>
-                                                    <button type="button" id="btnCancelComment" class="btn btn-default" data-dismiss="modal">Cancel</button>*@
+                        <div id="dvComments" style="display:none;">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CommentDesc, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div ass="col-md-10">
+                                    @Html.TextAreaFor(model => model.CommentDesc, new { @id = "CommentDesc", @class = "form-control", @rows = "200" }) @Html.ValidationMessageFor(model => model.CommentDesc, "", new { @class = "text-danger" })
+                                    <script>
+                                                CKEDITOR.replace("CommentDesc");
+                                    </script>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" value="btnAddComment" name="btnAddComment" id="btnAddComment" class="btn btn-primary">Add</button>
+                                <button type="button" id="btnCancelComment" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -711,6 +718,10 @@
 
                                                             }
                                                         });
+                                                        GetComments();
+                                                        $("#dvComments").css("display", "none");
+                                                        $("#btnAddComment").css("display", "none");
+                                                        $("#btnCancelComment").css("display", "none");
                                                     });
                                                     $("#btnCancelComment").click(function () {
                                                         $("#dvComments").css("display", "none");

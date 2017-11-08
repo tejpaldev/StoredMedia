@@ -30,13 +30,23 @@ namespace StoreyedMedia.BAL
         #region Business Methods 
 
         /// <summary>
+        /// Get Tags By CategoryId
+        /// </summary>
+        /// <returns></returns>
+        public List<Tags> GetAllTagsByCategoryId(int categoryId, int pageNumber, int pageSize, out int total, string orderByClause)
+        {
+            total = GetTotalTagsCount(categoryId);
+            return _Tags.GetAllTagsByCategoryId(categoryId, pageNumber, pageSize, orderByClause);
+        }
+
+
+        /// <summary>
         /// Get Tags
         /// </summary>
         /// <returns></returns>
-        public List<Tags> GetAllTags(int categoryId, int pageNumber, int pageSize, out int total, string orderByClause)
+        public List<Tags> GetAllTags()
         {
-            total = GetTotalTagsCount(categoryId);
-            return _Tags.GetAllTags(categoryId, pageNumber, pageSize, orderByClause);
+            return _Tags.GetAllTags();
         }
 
 

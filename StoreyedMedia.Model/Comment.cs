@@ -12,5 +12,7 @@ namespace StoreyedMedia.Model
         public int StoryId { get; set; }
 
         public string CommentDesc { get; set; }
+        public string CreatedBy { get; set; }
+        public DateTime CreationDate { get; set; }
     }
 }

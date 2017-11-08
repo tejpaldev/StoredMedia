@@ -31,6 +31,7 @@ namespace StoreyedMedia.Web.Controllers
 
         readonly StoryBal _service;
         readonly SourceBal _ServiceSource;
+        readonly TagsBal _ServiceTags;
 
         /// <summary>
         /// initialize service in constructor
@@ -39,6 +40,7 @@ namespace StoreyedMedia.Web.Controllers
         {
             _service = new StoryBal();
             _ServiceSource = new SourceBal();
+            _ServiceTags = new TagsBal();
 
         }
 
@@ -72,6 +74,8 @@ namespace StoreyedMedia.Web.Controllers
             lstStatus = _service.GetEditStoryStatuses();
             SelectList statusList = new SelectList(lstStatus, "StatusId", "Status");
             ViewData["StatusId"] = statusList;
+            List<Tags> lstTags = new List<Tags>();
+            lstTags = _ServiceTags.GetAllTags();
             ViewData["SubmittedBy"] = CommonBase.LoggedInUser;
             return View("StoryBank");
         }
@@ -131,6 +135,10 @@ namespace StoreyedMedia.Web.Controllers
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < comment.Count; i++)
             {
+                sb.Append(comment[i].CreatedBy);
+                sb.Append("-");
+                sb.Append(comment[i].CreatedOnDateTime);
+                sb.Append("</br>");
                 sb.Append(comment[i].CommentDesc);
                 sb.Append("</br>");
             }
@@ -169,7 +177,7 @@ namespace StoreyedMedia.Web.Controllers
         public JsonResult AddComment(int storyId, string description)
         {
             //Story story = new Story();
-            var a = _service.AddComment(storyId, description);
+            var a = _service.AddComment(storyId, description, CommonBase.LoggedInUser1);
             //story.SubmittedBy = CommonBase.LoggedInUser1;
             //story.PublishedBy = CommonBase.LoggedInUser1;
             //story.SubmittedById = CommonBase.LoggedInUserId;

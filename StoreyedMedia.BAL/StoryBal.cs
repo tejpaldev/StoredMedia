@@ -229,9 +229,9 @@ namespace StroreyedMedia.BAL
             return results;
         }
 
-        public int AddComment(int storyId, string description)
+        public int AddComment(int storyId, string description,string CreatedBy)
         {
-            int results = _Story.AddComment(storyId, description);
+            int results = _Story.AddComment(storyId, description,CreatedBy);
             return results;
         }
     
