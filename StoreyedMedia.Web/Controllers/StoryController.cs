@@ -30,6 +30,7 @@ namespace StoreyedMedia.Web.Controllers
         #region Constructor
 
         readonly StoryBal _service;
+        readonly TagsBal _tag;
         readonly SourceBal _ServiceSource;
         readonly TagsBal _ServiceTags;
 
@@ -53,6 +54,7 @@ namespace StoreyedMedia.Web.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
+            //GetAllTags();
             List<Media> lstMedia = new List<Media>();
             lstMedia = _service.GetAllMediaType();
             Media media = new Media();
@@ -74,8 +76,8 @@ namespace StoreyedMedia.Web.Controllers
             lstStatus = _service.GetEditStoryStatuses();
             SelectList statusList = new SelectList(lstStatus, "StatusId", "Status");
             ViewData["StatusId"] = statusList;
-            List<Tags> lstTags = new List<Tags>();
-            lstTags = _ServiceTags.GetAllTags();
+            //List<Tags> lstTags = new List<Tags>();
+            //lstTags = _ServiceTags.GetAllTags();
             ViewData["SubmittedBy"] = CommonBase.LoggedInUser;
             return View("StoryBank");
         }
@@ -83,14 +85,13 @@ namespace StoreyedMedia.Web.Controllers
         [HttpPost]
         public JsonResult Index(string Prefix)
         {
-            List<Story> ObjList = new List<Story>()
-            {
-                new Story {Author="Olivia E. Winter"},
-                new Story {Author="Olivia Potter"},
-             };
-            var Author = (from N in ObjList
-                          where N.Author.StartsWith(Prefix)
-                          select new { N.Author });
+
+            List<Tags> Lists = _ServiceTags.GetAllTags();
+
+
+            var Author = (from N in Lists
+                          where N.Tag.StartsWith(Prefix)
+                          select new { N.Tag, N.TagId }).Take(5);
             return Json(Author, JsonRequestBehavior.AllowGet);
         }
 
@@ -124,6 +125,17 @@ namespace StoreyedMedia.Web.Controllers
             ViewData["SubmittedBy"] = story.SubmittedBy;
             return Json(story, JsonRequestBehavior.AllowGet);
         }
+
+
+
+        //[HttpPost]
+        //public JsonResult GetAllTags()
+        //{
+        //    //List<Tags> tags = new List<Tags>();
+        //    List<Tags> tags = _ServiceTags.GetAllTags();
+        //    var a = (from p in tags select p);
+        //    return Json(tags, JsonRequestBehavior.AllowGet);
+        //}
 
 
         [HttpPost]
@@ -176,12 +188,14 @@ namespace StoreyedMedia.Web.Controllers
         [ValidateInput(false)]
         public JsonResult AddComment(int storyId, string description)
         {
+
             //Story story = new Story();
             var a = _service.AddComment(storyId, description, CommonBase.LoggedInUser1);
             //story.SubmittedBy = CommonBase.LoggedInUser1;
             //story.PublishedBy = CommonBase.LoggedInUser1;
             //story.SubmittedById = CommonBase.LoggedInUserId;
             //story.PublishedById= CommonBase.LoggedInUserId1;
+            GetComments(storyId);
             return Json(a, JsonRequestBehavior.AllowGet);
         }
 
