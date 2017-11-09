@@ -48,6 +48,8 @@
             $("#StoryLink").val("");
             $("#Author").val("");
             $("#Tags").val("");
+            $("#dvCreateDynamicBoxes").empty();
+            $("#dvCreateDynamicBoxes").css("display", "none");
             // $("#LogLine").val(e.LogLine);
             $("#Synopsis").val("");
             $("#FeatureOnHomepage").prop("checked", false);
@@ -62,8 +64,7 @@
             $("#divStatus").css("display", "none");
             $("#btnPublish").css("display", "none");
             $("#btnSaveDraft").css("display", "none");
-            $("#btnAddBanks").css("display", "inline-block"); 
-            $("#dvBindCommentBorder").css("display", "none");
+            $("#btnAddBanks").css("display", "inline-block");
         }
         function CreateAlert() {
 
@@ -248,7 +249,9 @@
             $("#btnPublish").css("display", "none");
             $("#btnSaveDraft").css("display", "inline-block");
             $("#btnAddBanks").css("display", "none");
-            $("#dvBindCommentBorder").css("display", "inline-block"); 
+            //$("#btnAddComment").css("display", "inline-block");
+            //$("#btnCancelComment").css("display", "inline-block");
+            //$("#commentTextArea").css("display", "inline-block");
             $('#storyModal').modal({ backdrop: 'static', keyboard: false }, 'show');
             if (e.FeaturedImage == null || e.FeaturedImage == '') {
                 $("#FeaturedImageFile").css("display", "block");
@@ -398,7 +401,7 @@
                 <button type="button" id="btnAddStory" class="btn btn-default pull-right">Add Story</button>
             </div>
             <div class="pull-right">
-                <button type="button" id="btnEditStory" onclick="GetStoryById(45)" class="btn btn-default pull-right">Edit Story</button>
+                <button type="button" id="btnEditStory" onclick="GetStoryById(38)" class="btn btn-default pull-right">Edit Story</button>
             </div>
         </div>
         <br />
@@ -534,6 +537,10 @@
                                     <div class="col-md-6">
                                         @Html.EditorFor(model => model.Tags, new { htmlAttributes = new { @onchange = "VisibleSaveDraft(this)", @class = "form-control", id = "Tags" } })
                                         @Html.ValidationMessageFor(Model => Model.Tags)
+                                        @*<input id="hdnTagId" type="hidden" />
+                                            <input id="hdnListAllTagIds" type="hidden" />*@
+                                        @Html.Hidden("hdnTagId")
+                                        @Html.Hidden("hdnListAllTagIds")
                                     </div>
                                     <div class="col-md-4">
                                     </div>
@@ -599,7 +606,7 @@
                                         @Html.ValidationMessageFor(Model => Model.FeaturedImage)
                                     </div>
                                 </div>
-                                <div class="form-group" id="dvBindCommentBorder">
+                                <div class="form-group">
                                     <hr />
                                     <div id="dvBindComment">
 
@@ -607,7 +614,7 @@
                                     <hr />
                                 </div>
                                 <button type="button" id="btnAddCommentPopup" class="btn btn-default" data-dismiss="modal">Add a Comment</button>
-                                @*<div id="dvComments" style="display:none;">
+                                <div id="dvComments" style="display:none;">
                                     <div class="form-group">
                                         @Html.LabelFor(model => model.CommentDesc, htmlAttributes: new { @class = "control-label col-md-2" })
                                         <div ass="col-md-10">
@@ -623,8 +630,9 @@
                                         <button type="button" id="btnCancelComment" class="btn btn-default" data-dismiss="modal">Cancel</button>
                                     </div>
 
-                                </div>*@
-                                
+                                </div>
+                                @*@Html.AntiForgeryToken()*@
+                                @*</form>*@
                             </div>
                         </div>
                     </div>
@@ -635,23 +643,14 @@
                             <button type="submit" value="Published" name="btnAddBanks" id="btnAddBanks" class="btn btn-default">Add to Bank</button>
                             <button type="button" id="btnCancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </p>
-                        <div id="dvComments" style="display:none;">
-                            <div class="form-group">
-                                @Html.LabelFor(model => model.CommentDesc, htmlAttributes: new { @class = "control-label col-md-2" })
-                                <div ass="col-md-10">
-                                    @Html.TextAreaFor(model => model.CommentDesc, new { @id = "CommentDesc", @class = "form-control", @rows = "200" }) @Html.ValidationMessageFor(model => model.CommentDesc, "", new { @class = "text-danger" })
-                                    <script>
-                                                CKEDITOR.replace("CommentDesc");
-                                    </script>
-                                </div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" value="btnAddComment" name="btnAddComment" id="btnAddComment" class="btn btn-primary">Add</button>
-                                <button type="button" id="btnCancelComment" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                            </div>
-
-                        </div>
+                        @*<h4>
+                                                        Comment
+                                                    </h4>
+                                                    <textarea name="area3" style="width: 300px; height: 100px;">
+                                   HTML content default in textarea
+                            </textarea>
+                                                    <button type="submit" value="AddComment" name="btnAddComment" id="btnAddComment" class="btn btn-primary">Add</button>
+                                                    <button type="button" id="btnCancelComment" class="btn btn-default" data-dismiss="modal">Cancel</button>*@
                     </div>
                 </div>
             </div>
@@ -711,6 +710,7 @@
 
                                                                 if (data != null) {
                                                                     alert('Saved');
+                                                                    GetComments();
                                                                 } else {
                                                                     alert("Failed!");
 
@@ -718,10 +718,6 @@
 
                                                             }
                                                         });
-                                                        GetComments();
-                                                        $("#dvComments").css("display", "none");
-                                                        $("#btnAddComment").css("display", "none");
-                                                        $("#btnCancelComment").css("display", "none");
                                                     });
                                                     $("#btnCancelComment").click(function () {
                                                         $("#dvComments").css("display", "none");
@@ -816,7 +812,7 @@
                                                     //alert();
                                                     id = $("#" + id + "");
                                                     id.remove();
-                                                    
+
                                                 }
 
 </script>
@@ -863,16 +859,33 @@
         $("#Tags").autocomplete({
             source: function (request, response) {
                 $.ajax({
-                    url: "/Story/Index",
+                    url: "/Story/GetAllTags",
                     type: "POST",
                     dataType: "json",
                     data: { Prefix: request.term },
                     success: function (data) {
                         response($.map(data, function (item) {
-                            return { label: item.Author, value: item.Author };
+                                                       return { label: item.Tag, id: item.TagId};
                         }))
                     }
                 })
+            },
+            select: function (event, ui) {
+                //$("#hdnTagId").val(ui.item.id);
+
+
+
+
+                var closeId = ui.item.id;
+                var closeValue = ui.item.value
+                //$("#hdnTagId")[0].value;
+                //if ($("#Tags")[0].value != '' && $("#Tags")[0].value != undefined && $("#Tags")[0].value != null) {
+                $("#dvCreateDynamicBoxes").css("display", "block");
+                $("#dvCreateDynamicBoxes").append('<div style="border: 1px solid;" class="btns" id="' + closeId + '">' + closeValue + '<a style="float:right;" class="bt"' + 'onclick="CloseDiv(' + closeId + ')"' + 'id=btSubmit >X</a></div>');
+                    var IDs = [];
+                    $("#dvCreateDynamicBoxes").find(".btns").each(function () { IDs.push(this.id); });
+                    $("#hdnListAllTagIds").val(IDs);
+                    $("#Tags").val('');
             },
             messages: {
                 noResults: "",
@@ -881,11 +894,16 @@
                 }
             }
         });
-        $("#Tags").blur(function () {
-            var closeId = 55;
-            $("#dvCreateDynamicBoxes").append('<div class="btns" id="' + closeId + '">' + $("#Tags")[0].value + '<a class="btns"' + 'onclick="CloseDiv(' + closeId + ')"' + 'id=btSubmit >X</a></div>');
-            //$("#dvCreateDynamicBoxes").append('');
-            $("#Tags").val('');
-        });
+        //$("#Tags").blur(function () {
+        //    var closeId = $("#hdnTagId")[0].value ;
+        //    if ($("#Tags")[0].value != '' && $("#Tags")[0].value != undefined && $("#Tags")[0].value != null)
+        //    {
+        //        $("#dvCreateDynamicBoxes").append('<div style="border: 1px solid;" class="btns" id="' + closeId + '">' + $("#Tags")[0].value + '<a style="float:right;" class="bt"' + 'onclick="CloseDiv(' + closeId + ')"' + 'id=btSubmit >X</a></div>');
+        //        var IDs = [];
+        //        $("#dvCreateDynamicBoxes").find(".btns").each(function () { IDs.push(this.id); });
+        //        $("#hdnListAllTagIds").val(IDs);
+        //        $("#Tags").val('');
+        //}
+        //});
     })
 </script>

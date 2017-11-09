@@ -83,7 +83,7 @@ namespace StoreyedMedia.Web.Controllers
         }
 
         [HttpPost]
-        public JsonResult Index(string Prefix)
+        public JsonResult GetAllTags(string Prefix)
         {
 
             List<Tags> Lists = _ServiceTags.GetAllTags();
@@ -92,6 +92,20 @@ namespace StoreyedMedia.Web.Controllers
             var Author = (from N in Lists
                           where N.Tag.StartsWith(Prefix)
                           select new { N.Tag, N.TagId }).Take(5);
+            return Json(Author, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        public JsonResult Index(string Prefix)
+        {
+            List<Story> ObjList = new List<Story>()
+            {
+                new Story {Author="Olivia E. Winter"},
+                new Story {Author="Olivia Potter"},
+             };
+            var Author = (from N in ObjList
+                          where N.Author.StartsWith(Prefix)
+                          select new { N.Author });
             return Json(Author, JsonRequestBehavior.AllowGet);
         }
 
@@ -145,41 +159,18 @@ namespace StoreyedMedia.Web.Controllers
             comment = _service.GetComments(sId);
 
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < comment.Count; i++)
+            if (comment != null)
             {
-                sb.Append(comment[i].CreatedBy);
-                sb.Append("-");
-                sb.Append(comment[i].CreatedOnDateTime);
-                sb.Append("</br>");
-                sb.Append(comment[i].CommentDesc);
-                sb.Append("</br>");
+                for (int i = 0; i < comment.Count; i++)
+                {
+                    sb.Append(comment[i].CreatedBy);
+                    sb.Append("-");
+                    sb.Append(comment[i].CreatedOnDateTime);
+                    sb.Append("</br>");
+                    sb.Append(comment[i].CommentDesc);
+                    sb.Append("</br>");
+                }
             }
-            //Comment cmt = new Comment();
-            //cmt.StoryId = 38;
-            //cmt.CommentDesc = " test  test  test  test  test  test  test  test  test  test  test  test  test  test  test  test test";
-            //cmt.CommentId = 1;
-            //sb.Append(cmt.CommentDesc);
-            //cmt.StoryId = 38;
-            //cmt.CommentDesc = " test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1  test1 ";
-            //cmt.CommentId = 2;
-            //sb.Append("</br>");
-            //sb.Append(cmt.CommentDesc);
-            //cmt.StoryId = 38;
-            //cmt.CommentDesc = " test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2  test2 ";
-            //cmt.CommentId = 3;
-
-            //sb.Append("</br>");
-            //sb.Append(cmt.CommentDesc);
-
-            //cmt.StoryId = 38;
-            //cmt.CommentDesc = " test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3  test3 ";
-            //cmt.CommentId = 4;
-            ////comment = new List<Comment>
-            ////comment.Add(cmt);
-
-            //sb.Append("</br>");
-            //sb.Append(cmt.CommentDesc);
-
             return Json(sb.ToString(), JsonRequestBehavior.AllowGet);
         }
 
@@ -195,7 +186,7 @@ namespace StoreyedMedia.Web.Controllers
             //story.PublishedBy = CommonBase.LoggedInUser1;
             //story.SubmittedById = CommonBase.LoggedInUserId;
             //story.PublishedById= CommonBase.LoggedInUserId1;
-            GetComments(storyId);
+            //GetComments(storyId);
             return Json(a, JsonRequestBehavior.AllowGet);
         }
 
@@ -226,7 +217,13 @@ namespace StoreyedMedia.Web.Controllers
             story.CreatedOnDateTime = DateTime.Now;
 
             List<int> tagIdList = new List<int>();
-            tagIdList.Add(1); tagIdList.Add(3);
+            string TagID = Request.Form["hdnListAllTagIds"];
+
+            string[] words = TagID.Split(',');
+            foreach (string word in words)
+            {
+                tagIdList.Add(Convert.ToInt32(word));
+            }
 
             //List<int> authorIdList = new List<int>();
             //authorIdList.Add(1); authorIdList.Add(2);
