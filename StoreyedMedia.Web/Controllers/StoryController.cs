@@ -74,10 +74,6 @@ namespace StoreyedMedia.Web.Controllers
             ViewData["SourceId"] = sourceList;
             List<Story> lstStatus = new List<Story>();
             lstStatus = _service.GetEditStoryStatuses();
-            Story story = new Story();
-            story.StatusId = 0;
-            story.Status = "Select Status";
-            lstStatus.Insert(0, story);
             SelectList statusList = new SelectList(lstStatus, "StatusId", "Status");
             ViewData["StatusId"] = statusList;
             return View("StoryBank");
@@ -146,6 +142,19 @@ namespace StoreyedMedia.Web.Controllers
         }
 
 
+        //[HttpPost]
+        //public JsonResult IsStatusPublished(int Id,int StatusId)
+        //{
+        //    Story story = new Story();
+        //    story = _service.GetStoryById(Id);
+        //    int statusType = _service.GetStatus("Published");
+        //    if(story.StatusId == statusType && StatusId != statusType)
+        //        return Json(true);
+        //    else
+        //        return Json(false);
+        //}
+
+
 
         //[HttpPost]
         //public JsonResult GetAllTags()
@@ -200,22 +209,26 @@ namespace StoreyedMedia.Web.Controllers
         public ActionResult Save(Story story, List<HttpPostedFileBase> mediaUrlFile, HttpPostedFileBase featuredImageFile)
         {
             var action = "";
-            if (Request.Form["btnPublish"] != null)
+            if (story.StoryId == 0)
             {
-                action = Request.Form["btnPublish"];
-                story.PublishedById = CommonBase.LoggedInUserId2;
-                //Write your code here
+                if (Request.Form["btnPublish"] != null)
+                {
+                    action = Request.Form["btnPublish"];
+                    story.PublishedById = CommonBase.LoggedInUserId2;
+                    //Write your code here
+                }
+                else if (Request.Form["btnSaveDraft"] != null)
+                {
+                    action = Request.Form["btnSaveDraft"];
+                    //Write your code here
+                }
+                else if (Request.Form["btnAddBanks"] != null)
+                {
+                    action = Request.Form["btnAddBanks"];
+                    //Write your code here
+                }
             }
-            else if (Request.Form["btnSaveDraft"] != null)
-            {
-                action = Request.Form["btnSaveDraft"];
-                //Write your code here
-            }
-            else if (Request.Form["btnAddBanks"] != null)
-            {
-                action = Request.Form["btnAddBanks"];
-                //Write your code here
-            }
+
             var IsEdit = Request.Params["IsEdit"];
             if (story.StatusId==0)
             {

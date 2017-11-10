@@ -167,6 +167,21 @@
             $("#btnAddStory").on("click", Add);
             //$("#btnEditStory").on("click", Edit("1"));
             $("#btnSearch").on("click", Search);
+
+            //$("#ddlStatusId").on("change", function () {
+            //    var StoryId = $("#StoryId").val(); 
+            //    var StatusId = $(this).val();
+            //    $.ajax({
+            //        type: "post",
+            //        url: "/Story/IsStatusPublished",
+            //        data: { "Id": StoryId, "StatusId": StatusId },
+            //        datatype: "json",
+            //        success: function (data) {
+            //            Edit(data);
+            //            GetComments();
+            //        }
+            //    });
+            //});  
         });
 
 
@@ -418,7 +433,7 @@
         @Html.ValidationSummary(true)
     <!-- Modal -->
         <div class="modal fade" id="storyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog" style="height: 150px">
+            <div class="modal-dialog" style="height: 150px; position:fixed">
                 <div class="modal-content">
                     <div class="modal-header">
                         <label style="float:left">
@@ -454,7 +469,7 @@
                                         <label for="StatusId">*Status</label>
                                     </div>
                                     <div class="col-md-6">
-                                        @Html.DropDownListFor(model => Model.StatusId, ViewData["StatusId"] as List<SelectListItem>, new { @class = "form-control" })@*style = "width: 200px;height:30px"*@
+                                        @Html.DropDownListFor(model => Model.StatusId, ViewData["StatusId"] as List<SelectListItem>, new { @class = "form-control", id = "ddlStatusId" })@*style = "width: 200px;height:30px"*@
                                         @Html.ValidationMessageFor(Model => Model.StatusId)
                                     </div>
                                 </div>

@@ -35,7 +35,7 @@ namespace StoreyedMedia.DAL.Mappers
         public int _ordinalFeatureOnHomepage;
         public int _ordinalTagIdList;
         public int _ordinalMediaTypeId;
-        public int _ordinalSynopsis;        
+        public int _ordinalSynopsis;
         private bool _isInitialized = false;
 
         #endregion
@@ -54,8 +54,8 @@ namespace StoreyedMedia.DAL.Mappers
             //_ordinalLogLine = ColumnExists(reader, "LogLine") ? reader.GetOrdinal("LogLine") : CommonBase.NonExistantOrdinal;
             _ordinalSourceId = ColumnExists(reader, "SourceId") ? reader.GetOrdinal("SourceId") : CommonBase.NonExistantOrdinal;
             _ordinalSourceName = ColumnExists(reader, "SourceName") ? reader.GetOrdinal("SourceName") : CommonBase.NonExistantOrdinal;
-            _ordinalStatusId = ColumnExists(reader, "StatusId") ? reader.GetOrdinal("StatusId") : CommonBase.NonExistantOrdinal;
-            _ordinalStatus = ColumnExists(reader, "Status") ? reader.GetOrdinal("Status") : CommonBase.NonExistantOrdinal;
+            _ordinalStatusId = ColumnExists(reader, "StatusId") ? reader.GetOrdinal("StatusId") : CommonBase.NonExistantOrdinal; 
+             _ordinalStatus = ColumnExists(reader, "Status") ? reader.GetOrdinal("Status") : CommonBase.NonExistantOrdinal;
             _ordinalAuthor = ColumnExists(reader, "Author") ? reader.GetOrdinal("Author") : CommonBase.NonExistantOrdinal;
             _ordinalPublishedDate = ColumnExists(reader, "PublishedDate") ? reader.GetOrdinal("PublishedDate") : CommonBase.NonExistantOrdinal;
             _ordinalStoryThumbnail = ColumnExists(reader, "StoryThumbnail") ? reader.GetOrdinal("StoryThumbnail") : CommonBase.NonExistantOrdinal;
@@ -74,7 +74,7 @@ namespace StoreyedMedia.DAL.Mappers
             _ordinalDateSrcPublished = ColumnExists(reader, "DateSrcPublished") ? reader.GetOrdinal("DateSrcPublished") : CommonBase.NonExistantOrdinal;
             _ordinalFeatureOnHomepage = ColumnExists(reader, "FeatureOnHomepage") ? reader.GetOrdinal("FeatureOnHomepage") : CommonBase.NonExistantOrdinal;
             _ordinalTagIdList = ColumnExists(reader, "TagIdList") ? reader.GetOrdinal("TagIdList") : CommonBase.NonExistantOrdinal;
-            _ordinalMediaTypeId = ColumnExists(reader, "MediaTypeId") ? reader.GetOrdinal("MediaTypeId") : CommonBase.NonExistantOrdinal;     
+            _ordinalMediaTypeId = ColumnExists(reader, "MediaTypeId") ? reader.GetOrdinal("MediaTypeId") : CommonBase.NonExistantOrdinal;
 
         }
 
@@ -105,6 +105,7 @@ namespace StoreyedMedia.DAL.Mappers
             if (CommonBase.NonExistantOrdinal != _ordinalSourceName && !reader.IsDBNull(_ordinalSourceName)) { dto.SourceName = reader.GetString(_ordinalSourceName); }
             if (CommonBase.NonExistantOrdinal != _ordinalStoryExpireDate && !reader.IsDBNull(_ordinalStoryExpireDate)) { dto.ExpireDate = reader.GetDateTime(_ordinalStoryExpireDate); }
             if (CommonBase.NonExistantOrdinal != _ordinalStatus && !reader.IsDBNull(_ordinalStatus)) { dto.Status = reader.GetString(_ordinalStatus); }
+            if (CommonBase.NonExistantOrdinal != _ordinalStatusId && !reader.IsDBNull(_ordinalStatusId)) { dto.StatusId = Convert.ToInt32(reader.GetValue(_ordinalStatusId)); }
             if (CommonBase.NonExistantOrdinal != _ordinalAuthor && !reader.IsDBNull(_ordinalAuthor)) { dto.Author = reader.GetString(_ordinalAuthor); }
             if (CommonBase.NonExistantOrdinal != _ordinalPublishedDate && !reader.IsDBNull(_ordinalPublishedDate)) { dto.PublishedDate = reader.GetDateTime(_ordinalPublishedDate); }
             if (CommonBase.NonExistantOrdinal != _ordinalStoryThumbnail && !reader.IsDBNull(_ordinalStoryThumbnail)) { dto.StoryThumbnail = reader.GetString(_ordinalStoryThumbnail); }
