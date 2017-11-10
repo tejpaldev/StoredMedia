@@ -74,11 +74,12 @@ namespace StoreyedMedia.Web.Controllers
             ViewData["SourceId"] = sourceList;
             List<Story> lstStatus = new List<Story>();
             lstStatus = _service.GetEditStoryStatuses();
+            Story story = new Story();
+            story.StatusId = 0;
+            story.Status = "Select Status";
+            lstStatus.Insert(0, story);
             SelectList statusList = new SelectList(lstStatus, "StatusId", "Status");
             ViewData["StatusId"] = statusList;
-            //List<Tags> lstTags = new List<Tags>();
-            //lstTags = _ServiceTags.GetAllTags();
-            ViewData["SubmittedBy"] = CommonBase.LoggedInUser;
             return View("StoryBank");
         }
 
@@ -136,7 +137,11 @@ namespace StoreyedMedia.Web.Controllers
             Story story = new Story();
             story = _service.GetStoryById(Id);
             story.FeaturedImage = S3Cloud.IsValidGuid(story.FeaturedImage) ? S3Cloud.GetFileFromS3(story.FeaturedImage) : string.Empty;
-            ViewData["SubmittedBy"] = story.SubmittedBy;
+            if (story.SubmittedBy == null)
+                ViewData["SubmittedBy"] = CommonBase.LoggedInUser1;
+            else
+                ViewData["SubmittedBy"] = story.SubmittedBy;
+            ViewData["PublishedBy"] = story.PublishedBy;
             return Json(story, JsonRequestBehavior.AllowGet);
         }
 
@@ -198,6 +203,7 @@ namespace StoreyedMedia.Web.Controllers
             if (Request.Form["btnPublish"] != null)
             {
                 action = Request.Form["btnPublish"];
+                story.PublishedById = CommonBase.LoggedInUserId2;
                 //Write your code here
             }
             else if (Request.Form["btnSaveDraft"] != null)
@@ -211,30 +217,29 @@ namespace StoreyedMedia.Web.Controllers
                 //Write your code here
             }
             var IsEdit = Request.Params["IsEdit"];
-            //var action = Request.Params["hdnAction"];
-            int statusType = _service.GetStatus(action);
-            story.StatusId = statusType != 0 ? Convert.ToInt32(statusType) : statusType;
+            if (story.StatusId==0)
+            {
+                int statusType = _service.GetStatus(action);
+                story.StatusId = statusType != 0 ? Convert.ToInt32(statusType) : statusType;
+            }
             story.CreatedOnDateTime = DateTime.Now;
 
             List<int> tagIdList = new List<int>();
             string TagID = Request.Form["hdnListAllTagIds"];
-
-            string[] words = TagID.Split(',');
-            foreach (string word in words)
+            if (TagID != "")
             {
-                tagIdList.Add(Convert.ToInt32(word));
+                string[] words = TagID.Split(',');
+                foreach (string word in words)
+                {
+                    tagIdList.Add(Convert.ToInt32(word));
+                }
             }
-
-            //List<int> authorIdList = new List<int>();
-            //authorIdList.Add(1); authorIdList.Add(2);
-
 
             Story result = new Story();
             if (story.StoryId == 0)
             {
                 story.IsNew = true;
                 story.CreatedByUser = "T";
-                story.SubmittedById = CommonBase.LoggedInUserId;
                 //story.DatePosted = DateTime.Now.Date;
                 int isStoryExist = 0;
                 if (story.Title != null && story.StoryLink != null)
@@ -249,7 +254,6 @@ namespace StoreyedMedia.Web.Controllers
             }
             else
             {
-                story.PublishedById = CommonBase.LoggedInUserId1;
                 result = _service.EditStory(story, null, null, mediaUrlFile, featuredImageFile, tagIdList);
                 TempData["storyMessage"] = "Story has been updated successfully";
             }

@@ -15,8 +15,10 @@ namespace StoreyedMedia.Model
         public static string StringNullValue = null;
         public static string LoggedInUser="TestAdmin";
         public static int LoggedInUserId = 2;
-        public static string LoggedInUser1 = "SecondaryAdmin";
+        public static string LoggedInUser1 = "Robert Reader";
         public static int LoggedInUserId1 = 3;
+        public static string LoggedInUser2 = "Vanessa Toll";
+        public static int LoggedInUserId2 = 4;
 
     }
 

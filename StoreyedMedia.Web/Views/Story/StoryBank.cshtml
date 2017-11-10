@@ -43,6 +43,7 @@
             // $("#SubmittedBy").val("");
             //$("#DatePosted").val(formatDate(e.DatePosted));
             $("#MediaTypeId").val(0);
+            $("#StatusId").val(0);
             $("#SourceId").val(0);
             $("#DateSrcPublished").val("");
             $("#StoryLink").val("");
@@ -61,6 +62,7 @@
             $("#FeaturedImageFile").css("display", "block");
             $("#FeaturedImgBox").css("display", "none");
             $("#divPublishedBy").css("display", "none");
+            $("#divSubmittedBy").css("display", "none");
             $("#divStatus").css("display", "none");
             $("#btnPublish").css("display", "none");
             $("#btnSaveDraft").css("display", "none");
@@ -231,6 +233,7 @@
 
             $("#spanStoryHeading").html("Edit Story");
             $("#divPublishedBy").css("display", "block");
+            $("#divSubmittedBy").css("display", "block");
             $("#divStatus").css("display", "block");
             $("#StoryId").val(e.StoryId);
             $("#Title").val(e.Title);
@@ -401,7 +404,7 @@
                 <button type="button" id="btnAddStory" class="btn btn-default pull-right">Add Story</button>
             </div>
             <div class="pull-right">
-                <button type="button" id="btnEditStory" onclick="GetStoryById(38)" class="btn btn-default pull-right">Edit Story</button>
+                <button type="button" id="btnEditStory" onclick="GetStoryById(49)" class="btn btn-default pull-right">Edit Story</button>
             </div>
         </div>
         <br />
@@ -455,7 +458,7 @@
                                         @Html.ValidationMessageFor(Model => Model.StatusId)
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group" id="divSubmittedBy">
                                     <div class="col-md-4">
                                         <label for="SubmittedBy">Submitted By</label>
                                     </div>
@@ -517,7 +520,7 @@
                                         <label for="StoryLink">*URL</label>
                                     </div>
                                     <div class="col-md-6">
-                                        @Html.TextBoxFor(Model => Model.StoryLink, new { @class = "form-control", id = "StoryLink" })
+                                        <a>@Html.TextBoxFor(Model => Model.StoryLink, new { @class = "form-control", id = "StoryLink" })</a>
                                         @Html.ValidationMessageFor(Model => Model.StoryLink)
                                     </div>
                                 </div>
@@ -640,7 +643,7 @@
                         <p>
                             <button type="submit" value="Published" name="btnPublish" id="btnPublish" class="btn btn-primary">Approve & Publish</button>
                             <button type="submit" value="Draft" name="btnSaveDraft" id="btnSaveDraft" class="btn btn-default">Save Changes</button>
-                            <button type="submit" value="Published" name="btnAddBanks" id="btnAddBanks" class="btn btn-default">Add to Bank</button>
+                            <button type="submit" value="Unclaimed" name="btnAddBanks" id="btnAddBanks" class="btn btn-default">Add to Bank</button>
                             <button type="button" id="btnCancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </p>
                         @*<h4>
@@ -685,6 +688,7 @@
 
 
                                                         $("#dvPublishedBy").css("display", "none");
+                                                        $("#dvSubmittedBy").css("display", "none");
                                                         $("#btnAddCommentPopup").css("display", "none");
                                                         $("#hdnIsEdit").val(1);
 
@@ -738,7 +742,7 @@
                                                         $("#dvEditStatus").css("display", "block");
                                                         $("#dvPublishedBy").css("display", "block");
                                                         $("#btnAddCommentPopup").css("display", "block");
-                                                        //$("#dvPublishedBy").css("display", "none");
+                                                        $("#dvSubmittedBy").css("display", "block");
                                                         $("#hdnIsEdit").val(2);
                                                         return false;
                                                     });
