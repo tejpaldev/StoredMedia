@@ -43,6 +43,7 @@
             // $("#SubmittedBy").val("");
             //$("#DatePosted").val(formatDate(e.DatePosted));
             $("#MediaTypeId").val(0);
+            $("#hdnStatusId").val("");
             $("#StatusId").val(0);
             $("#SourceId").val(0);
             $("#DateSrcPublished").val("");
@@ -66,6 +67,7 @@
             $("#divStatus").css("display", "none");
             $("#btnPublish").css("display", "none");
             $("#btnSaveDraft").css("display", "none");
+            $("#btnSaveDraft1").css("display", "none");
             $("#btnAddBanks").css("display", "inline-block");
         }
         function CreateAlert() {
@@ -88,6 +90,17 @@
             $('#ImportModal').modal('show');
         };
 
+
+        function ChangeStatus() {
+            var publishedStatus = $("#ddlStatusId")[0][1].value;
+            var hiddenStatus = $("#ddlStatusId")[0][2].value;
+            var archiveStatus = $("#ddlStatusId")[0][3].value;
+            if (publishedStatus == $('#hdnStatusId').val()) {
+                if ($("#ddlStatusId  option:selected").val() == hiddenStatus || $("#ddlStatusId  option:selected").val() == archiveStatus) {
+                    $('#changeStatusModal').modal('show');
+                }
+            }
+        };
 
         $(document).ready(function () {
             $("#MediaUrlFile").on('change', function () {
@@ -117,12 +130,14 @@
             });
 
             $('form').ajaxForm({
-                beforeSend: function () {
+                beforeSend: function () {                  
                     //status.empty();
-                    //var percentVal = '0%';
+                    //var percentVal = '0%';$("#ddlStatusId  option:selected").val()
                     //bar.width(percentVal)
-                    //percent.html(percentVal);
+                    //percent.html(percentVal); $('#IsNew')[0].value
+                    $('#changeStatusModal').modal('hide');
                 },
+
                 //uploadProgress: function (event, position, total, percentComplete) {
                 //    var percentVal = percentComplete + '%';
                 //    bar.width(percentVal)
@@ -169,7 +184,7 @@
             $("#btnSearch").on("click", Search);
 
             //$("#ddlStatusId").on("change", function () {
-            //    var StoryId = $("#StoryId").val(); 
+            //    var StoryId = $("#StoryId").val();
             //    var StatusId = $(this).val();
             //    $.ajax({
             //        type: "post",
@@ -177,11 +192,13 @@
             //        data: { "Id": StoryId, "StatusId": StatusId },
             //        datatype: "json",
             //        success: function (data) {
-            //            Edit(data);
-            //            GetComments();
+            //            if (data == 'true')
+            //                $('#changeStatusModal').modal('show');
             //        }
             //    });
-            //});  
+            //});
+
+            //$("#btnChangeStatus").on("click", ChangeStatus);
         });
 
 
@@ -246,7 +263,7 @@
 
         function Edit(e) {
 
-            $("#spanStoryHeading").html("Edit Story");
+            $("#spanStoryHeading").html("Edit Story"); 
             $("#divPublishedBy").css("display", "block");
             $("#divSubmittedBy").css("display", "block");
             $("#divStatus").css("display", "block");
@@ -254,6 +271,10 @@
             $("#Title").val(e.Title);
             $("#SubmittedBy").val(e.SubmittedBy);
             $("#PublishedBy").val(e.PublishedBy);
+            $("#hdnStatusId").val(e.StatusId);
+            $("#ddlStatusId").val(e.StatusId);
+            if ($("#ddlStatusId  option:selected").text() == "")
+                $("#ddlStatusId").val("0");
             //$("#DatePosted").val(formatDate(e.DatePosted));
             $("#MediaTypeId").val(e.MediaTypeId);
             $("#SourceId").val(e.SourceId);
@@ -265,7 +286,8 @@
             $("#Synopsis").val(e.Synopsis);
             $("#FeatureOnHomepage").val(e.FeatureOnHomepage);
             $("#btnPublish").css("display", "none");
-            $("#btnSaveDraft").css("display", "inline-block");
+            $("#btnSaveDraft").css("display", "none");
+            $("#btnSaveDraft1").css("display", "inline-block");
             $("#btnAddBanks").css("display", "none");
             //$("#btnAddComment").css("display", "inline-block");
             //$("#btnCancelComment").css("display", "inline-block");
@@ -433,7 +455,7 @@
         @Html.ValidationSummary(true)
     <!-- Modal -->
         <div class="modal fade" id="storyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog" style="height: 150px; position:fixed">
+            <div class="modal-dialog" style="height: 150px">
                 <div class="modal-content">
                     <div class="modal-header">
                         <label style="float:left">
@@ -450,6 +472,7 @@
                                 @*<form role="form" id="frmStory" class='form-horizontal'>*@
                                 @Html.HiddenFor(Model => Model.IsNew)
                                 @Html.HiddenFor(Model => Model.CreatedOnDateTime)
+                               @Html.Hidden("hdnStatusId", null, new { @id = "hdnStatusId" }) 
                                 <div hidden>
                                     <label for="StoryId">Id</label>
                                     @Html.TextBoxFor(Model => Model.StoryId, new { @class = "form-control", id = "StoryId" })
@@ -658,6 +681,7 @@
                         <p>
                             <button type="submit" value="Published" name="btnPublish" id="btnPublish" class="btn btn-primary">Approve & Publish</button>
                             <button type="submit" value="Draft" name="btnSaveDraft" id="btnSaveDraft" class="btn btn-default">Save Changes</button>
+                            <button type="button" value="Draft1" name="btnSaveDraft1" id="btnSaveDraft1" class="btn btn-default" onclick=" return ChangeStatus()">Save Changes</button>
                             <button type="submit" value="Unclaimed" name="btnAddBanks" id="btnAddBanks" class="btn btn-default">Add to Bank</button>
                             <button type="button" id="btnCancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </p>
@@ -690,6 +714,26 @@
             </div>
         </div>
 
+        @*Change Story from published to hidden popup*@
+        <div class="modal fade" id="changeStatusModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" style="height: 150px;width:380px;position:fixed">
+                <div class="modal-content">
+                    <div class="modal-header jumbotron">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel4" style='font-weight: bold;'></h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="success-message" style="color: gray;font-weight:bold;">Are you sure you want to hide (or Archive) this Story?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary"  name="btnChangeStatus" id="btnChangeStatus" style="border: none; font-weight:bold;text-transform:uppercase;color:skyblue">Yes</button>
+                        <button class="btn btn-default" style="border: none;font-weight:bold;text-transform:uppercase;color:gray" data-dismiss="modal">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
 </body>
 <script type="text/javascript">
@@ -700,7 +744,7 @@
                                                     $("#btnAddStory").click(function () {
                                                         $("#btnPublish").css("display", "none");
                                                         $("#btnSaveDraft").css("display", "none");
-
+                                                        $("#btnSaveDraft1").css("display", "none");
 
                                                         $("#dvPublishedBy").css("display", "none");
                                                         $("#dvSubmittedBy").css("display", "none");
@@ -818,6 +862,7 @@
 
                                                 function VisibleSaveDraft(obj) {
                                                     if (obj.value != undefined && obj.value != "".trim()) {
+                                                        if ($('#hdnStatusId').val() == "")
                                                         $("#btnSaveDraft").css("display", "inline-block");
                                                         if ($("#StoryId").val() == "")
                                                             $("#btnPublish").css("display", "inline-block");
