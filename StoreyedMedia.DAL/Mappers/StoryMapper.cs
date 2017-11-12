@@ -128,7 +128,9 @@ namespace StoreyedMedia.DAL.Mappers
             if (reader.FieldCount > 0)
             {
                 DataTable dt = new DataTable();
-                dt.Load(reader);
+                dt.Columns.Add("TagIdList");
+                dt.Rows.Clear();
+                //dt.Load(reader);
                 //string TagString = string.Empty;
                 ////int numRows = dt.Rows.Count;
                 //for (int i = 0; i < dt.Rows.Count; i++)
@@ -136,6 +138,28 @@ namespace StoreyedMedia.DAL.Mappers
                 //    string a = dt.Rows[i][1].ToString() + "_";
                 //    TagString += a;
                 //}
+                Console.WriteLine(reader["TagIdList"]);
+                DataRow dr = dt.NewRow();
+
+                dr["TagIdList"] = reader["TagIdList"];
+                dt.Rows.Add(dr);
+                var moreResults = true;
+                while (moreResults)
+                {
+                    while (reader.Read())
+                    {
+                        //if ((reader["phoneNum"]).ToString() == "Home")
+                        //{
+                        Console.WriteLine(reader["TagIdList"]);
+                        DataRow dr1 = dt.NewRow();
+
+                        dr1["TagIdList"] = reader["TagIdList"];
+                        dt.Rows.Add(dr1);
+                        //}
+                    }
+
+                    moreResults = reader.NextResult();
+                }
                 dto.TagIdList = dt;
                 //if (CommonBase.NonExistantOrdinal != _ordinalTagIdList && !reader.IsDBNull(_ordinalTagIdList)) { dto.Tags = reader.GetString(_ordinalTagIdList); }
             }
