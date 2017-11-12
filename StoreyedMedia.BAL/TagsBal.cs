@@ -79,6 +79,11 @@ namespace StoreyedMedia.BAL
         {
             return _Tags.DeleteTag(tagId);
         }
+
+        public List<Tags> GetTagsByStoryId(string tagID)
+        {
+            return _Tags.GetTagsByStoryId(tagID);
+        }
         #endregion
 
     }

@@ -110,6 +110,47 @@ namespace StroreyedMedia.BAL
         public Story GetStoryById(int id)
         {
             Story results = _Story.GetStoryById(id);
+
+            DataTable dt = results.TagIdList;
+
+
+            //List<TagList> lst = new List<TagList>();
+            //for (int i = 0; i < dt.Rows.Count; i++)
+            //{
+            //    TagList tg = new TagList();
+            //    tg.Id = dt.Rows[i]["Id"].ToString();
+            //    tg.Tags = dt.Rows[i]["Name"].ToString();
+            //    lst.Add(tg);
+            //}
+
+
+            DataTable dtN = new DataTable();
+            dtN.Columns.Add("Id");
+            dtN.Columns.Add("Name");
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                string str = dt.Rows[i]["TagIdList"].ToString();
+                string[] values = str.Split('_');
+                DataRow dr = dtN.NewRow();
+
+                dr["Id"] = values[0];
+                dr["Name"] = values[1];
+
+                dtN.Rows.Add(dr);
+            }
+
+
+            results.TagIdList = dtN;
+
+            results.TagIdList = dtN;
+            //string TagString = string.Empty;
+            ////int numRows = dt.Rows.Count;
+            //for (int i = 0; i < dt.Rows.Count; i++)
+            //{
+            //    string a = dt.Rows[i][1].ToString() + "_";
+            //    TagString += a;
+            //}
             return results;
         }
 
@@ -229,12 +270,12 @@ namespace StroreyedMedia.BAL
             return results;
         }
 
-        public int AddComment(int storyId, string description,string CreatedBy)
+        public int AddComment(int storyId, string description, string CreatedBy)
         {
-            int results = _Story.AddComment(storyId, description,CreatedBy);
+            int results = _Story.AddComment(storyId, description, CreatedBy);
             return results;
         }
-    
+
         #endregion
 
         #region Private Methods
@@ -322,5 +363,11 @@ namespace StroreyedMedia.BAL
         #endregion
 
 
+    }
+    class TagList
+    {
+        public string Id { get; set; }
+
+        public string Tags { get; set; }
     }
 }

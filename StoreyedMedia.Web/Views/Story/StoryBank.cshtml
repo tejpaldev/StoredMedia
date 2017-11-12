@@ -11,9 +11,12 @@
     <script src="~/Scripts/jquery-2.1.3.min.js" type="text/javascript"></script>
     <script src="~/Scripts/bootstrap.min.js" type="text/javascript"></script>
     <script src="~/Scripts/ckeditor/ckeditor.js"></script>
-    @*<link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet" />*@
-    @*<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>*@
-    @*<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>*@
+    @*
+        <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet" />*@
+    @*
+        <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>*@
+    @*
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>*@
     <script src='https://cdn.rawgit.com/pguso/jquery-plugin-circliful/master/js/jquery.circliful.min.js'></script>
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
     <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>‌
@@ -90,7 +93,6 @@
             $('#ImportModal').modal('show');
         };
 
-
         function ChangeStatus() {
             var publishedStatus = $("#ddlStatusId")[0][1].value;
             var hiddenStatus = $("#ddlStatusId")[0][2].value;
@@ -130,26 +132,19 @@
             });
 
             $('form').ajaxForm({
-                beforeSend: function () {                  
-                    //status.empty();
-                    //var percentVal = '0%';$("#ddlStatusId  option:selected").val()
-                    //bar.width(percentVal)
-                    //percent.html(percentVal); $('#IsNew')[0].value
+                success: function (data) {
                     $('#changeStatusModal').modal('hide');
+                                                                            alert(data);
                 },
 
-                //uploadProgress: function (event, position, total, percentComplete) {
-                //    var percentVal = percentComplete + '%';
-                //    bar.width(percentVal)
-                //    percent.html(percentVal);
-                //},
-                //success: function () {
-                //    var percentVal = '100%';
-                //    bar.width(percentVal)
-                //    percent.html(percentVal);
-                //},
+                failure: function (data) {
+                    debugger
+                    alert(data);
+                                  },
+
                 complete: function (data) {
                     $("#storyModal").modal("hide");
+
                 }
             });
 
@@ -192,13 +187,11 @@
             //        data: { "Id": StoryId, "StatusId": StatusId },
             //        datatype: "json",
             //        success: function (data) {
-            //            if (data == 'true')
-            //                $('#changeStatusModal').modal('show');
+            //            Edit(data);
+            //            GetComments();
             //        }
             //    });
             //});
-
-            //$("#btnChangeStatus").on("click", ChangeStatus);
         });
 
 
@@ -233,17 +226,12 @@
                 //data: $('#formId').serialize(),
                 datatype: "json",
                 success: function (data) {
-                    Edit(data);
+                    if (data != null && data != undefined)
+                    {
+                        var a = JSON.parse(data)
+                        Edit(a);
                     GetComments();
-                    //if (data == "True") {
-                    //    location.reload();
-                    //    $(".chkContacts").prop("checked", false);
-
-
-                    //} else {
-
-
-                    //}
+                                        }
 
                 }
             });
@@ -263,24 +251,32 @@
 
         function Edit(e) {
 
-            $("#spanStoryHeading").html("Edit Story"); 
+            $("#spanStoryHeading").html("Edit Story");
             $("#divPublishedBy").css("display", "block");
+            $("#hdnStatusId").val(e.StatusId);
+            $("#ddlStatusId").val(e.StatusId);
+            if ($("#ddlStatusId  option:selected").text() == "")
+                $("#ddlStatusId").val("0");
             $("#divSubmittedBy").css("display", "block");
             $("#divStatus").css("display", "block");
             $("#StoryId").val(e.StoryId);
             $("#Title").val(e.Title);
             $("#SubmittedBy").val(e.SubmittedBy);
             $("#PublishedBy").val(e.PublishedBy);
-            $("#hdnStatusId").val(e.StatusId);
-            $("#ddlStatusId").val(e.StatusId);
-            if ($("#ddlStatusId  option:selected").text() == "")
-                $("#ddlStatusId").val("0");
             //$("#DatePosted").val(formatDate(e.DatePosted));
             $("#MediaTypeId").val(e.MediaTypeId);
             $("#SourceId").val(e.SourceId);
             $("#DateSrcPublished").val(formatDate(e.DateSrcPublished));
             $("#StoryLink").val(e.StoryLink);
             $("#Author").val(e.Author);
+            $("#dvCreateDynamicBoxes").empty();
+            for (i = 0; i < e.TagIdList.length; i++) {
+                $("#dvCreateDynamicBoxes").append('<div style="border: 1px solid;" class="btns" id="' + e.TagIdList[i].Id + '" > ' + e.TagIdList[i].Name + '<a style="float:right;" class="bt"' + 'onclick="CloseDiv(' + e.TagIdList[i].Id + ')"' + 'id=btSubmit> X</a ></div >');
+                }
+
+            //$("#dvCreateDynamicBoxes").append('<div style="border: 1px solid;" class="btns" id="' + e.TagId + '">' + closeValue + '<a style="float:right;" class="bt"' + 'onclick="CloseDiv(' + closeId + ')"' + 'id=btSubmit >X</a></div>');
+
+
             $("#Tags").val(e.Tags);
             //$("#LogLine").val(e.LogLine);
             $("#Synopsis").val(e.Synopsis);
@@ -441,21 +437,23 @@
                 <button type="button" id="btnAddStory" class="btn btn-default pull-right">Add Story</button>
             </div>
             <div class="pull-right">
-                <button type="button" id="btnEditStory" onclick="GetStoryById(49)" class="btn btn-default pull-right">Edit Story</button>
+                <button type="button" id="btnEditStory" onclick="GetStoryById(54)" class="btn btn-default pull-right">Edit Story</button>
             </div>
         </div>
         <br />
         <table id="contactsGrid" data-source="@Url.Action("GetStories" )"></table>
     </div>
     <form id="frmComment" action="" method="post"></form>
-    @using (Html.BeginForm("Save", "Story", FormMethod.Post))
+    @*@using (Html.BeginForm("Save", "Story", FormMethod.Post))*@
+    @using (Ajax.BeginForm("Save", "Story", new AjaxOptions { OnSuccess = "OnSuccess", OnFailure = "OnFailure", LoadingElementId = "progress" }))
     {
         @Html.Hidden("hdnIsEdit", 1);
         @*@Html.Hidden("hdnAction", "Published");*@
         @Html.ValidationSummary(true)
+
     <!-- Modal -->
         <div class="modal fade" id="storyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog" style="height: 150px">
+            <div class="modal-dialog" style="height: 150px;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <label style="float:left">
@@ -465,14 +463,14 @@
                         </label>
                     </div>
                     <div class="modal-body">
-                        @*For need to Maintain Design*@
-                        @*<form role="form" class='form-horizontal'></form>*@
                         <div class='form-horizontal'>
                             <div class="col-xs-12 col-sm-12">
                                 @*<form role="form" id="frmStory" class='form-horizontal'>*@
                                 @Html.HiddenFor(Model => Model.IsNew)
+                                @*@Html.Hidden("hdnMessage", "");*@
+                                @Html.Hidden("hdnStatusId", null, new { @id = "hdnStatusId" })
+
                                 @Html.HiddenFor(Model => Model.CreatedOnDateTime)
-                               @Html.Hidden("hdnStatusId", null, new { @id = "hdnStatusId" }) 
                                 <div hidden>
                                     <label for="StoryId">Id</label>
                                     @Html.TextBoxFor(Model => Model.StoryId, new { @class = "form-control", id = "StoryId" })
@@ -483,6 +481,7 @@
                                         <label for="Title">*Title</label>
                                     </div>
                                     <div class="col-md-8">
+                                        @*@Html.Raw(TempData["msg"])*@
                                         @Html.TextBoxFor(Model => Model.Title, new { @onchange = "VisibleSaveDraft(this)", @class = "form-control", id = "Title" })
                                         @Html.ValidationMessageFor(Model => Model.Title)
                                     </div>
@@ -515,15 +514,15 @@
                                     </div>
                                 </div>
                                 @*<div class="form-group">
-                                        <div class="col-md-4">
-                                            <label for="DatePosted">Date Posted</label>
-                                        </div>
-                                        <div class="col-md-7">
-                                            @Html.TextBoxFor(model => model.DatePosted, new { @class = "form-control ui-datepicker span11", @readonly = "readonly", @style = "display:block;float:left;" })
-                                            @Html.TextBoxFor(m => m.DatePosted, new { @class = "form-control datepicker", @type = "date" })
-                                            @Html.ValidationMessageFor(Model => Model.DatePosted)
+                                    <div class="col-md-4">
+                                    <label for="DatePosted">Date Posted</label>
+                                    </div>
+                                    <div class="col-md-7">
+                                    @Html.TextBoxFor(model => model.DatePosted, new { @class = "form-control ui-datepicker span11", @readonly = "readonly", @style = "display:block;float:left;" })
+                                    @Html.TextBoxFor(m => m.DatePosted, new { @class = "form-control datepicker", @type = "date" })
+                                    @Html.ValidationMessageFor(Model => Model.DatePosted)
 
-                                        </div>
+                                    </div>
                                     </div>*@
                                 <div class="form-group">
                                     <div class="col-md-4">
@@ -656,8 +655,9 @@
                                 </div>
                                 <button type="button" id="btnAddCommentPopup" class="btn btn-default" data-dismiss="modal">Add a Comment</button>
                                 <div id="dvComments" style="display:none;">
+                                    <span style="float:left" id="spnCommentHeading">Enter Description</span>
                                     <div class="form-group">
-                                        @Html.LabelFor(model => model.CommentDesc, htmlAttributes: new { @class = "control-label col-md-2" })
+                                        @*@Html.LabelFor(model => model.CommentDesc, htmlAttributes: new { @class = "control-label col-md-2" })*@
                                         <div ass="col-md-10">
                                             @Html.TextAreaFor(model => model.CommentDesc, new { @id = "CommentDesc", @class = "form-control", @rows = "200" }) @Html.ValidationMessageFor(model => model.CommentDesc, "", new { @class = "text-danger" })
                                             <script>
@@ -686,13 +686,13 @@
                             <button type="button" id="btnCancel" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         </p>
                         @*<h4>
-                                                        Comment
-                                                    </h4>
-                                                    <textarea name="area3" style="width: 300px; height: 100px;">
-                                   HTML content default in textarea
+                            Comment
+                            </h4>
+                            <textarea name="area3" style="width: 300px; height: 100px;">
+                            HTML content default in textarea
                             </textarea>
-                                                    <button type="submit" value="AddComment" name="btnAddComment" id="btnAddComment" class="btn btn-primary">Add</button>
-                                                    <button type="button" id="btnCancelComment" class="btn btn-default" data-dismiss="modal">Cancel</button>*@
+                            <button type="submit" value="AddComment" name="btnAddComment" id="btnAddComment" class="btn btn-primary">Add</button>
+                            <button type="button" id="btnCancelComment" class="btn btn-default" data-dismiss="modal">Cancel</button>*@
                     </div>
                 </div>
             </div>
@@ -713,7 +713,6 @@
                 </div>
             </div>
         </div>
-
         @*Change Story from published to hidden popup*@
         <div class="modal fade" id="changeStatusModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document" style="height: 150px;width:380px;position:fixed">
@@ -728,7 +727,7 @@
                         <p class="success-message" style="color: gray;font-weight:bold;">Are you sure you want to hide (or Archive) this Story?</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary"  name="btnChangeStatus" id="btnChangeStatus" style="border: none; font-weight:bold;text-transform:uppercase;color:skyblue">Yes</button>
+                        <button type="submit" class="btn btn-primary" name="btnChangeStatus" id="btnChangeStatus" style="border: none; font-weight:bold;text-transform:uppercase;color:skyblue">Yes</button>
                         <button class="btn btn-default" style="border: none;font-weight:bold;text-transform:uppercase;color:gray" data-dismiss="modal">No</button>
                     </div>
                 </div>
@@ -736,155 +735,168 @@
         </div>
     }
 </body>
-<script type="text/javascript">
-                                                $(document).ready(function () {
-                                                    //$("#btnPublish").css("visibility", "hidden");
-                                                    //$("#btnDenyArchive").css("visibility", "hidden");
-
-                                                    $("#btnAddStory").click(function () {
-                                                        $("#btnPublish").css("display", "none");
-                                                        $("#btnSaveDraft").css("display", "none");
-                                                        $("#btnSaveDraft1").css("display", "none");
-
-                                                        $("#dvPublishedBy").css("display", "none");
-                                                        $("#dvSubmittedBy").css("display", "none");
-                                                        $("#btnAddCommentPopup").css("display", "none");
-                                                        $("#hdnIsEdit").val(1);
-
-                                                        return false;
-                                                    });
-
-                                                    $("#btnAddComment").click(function () {
-                                                        debugger
-                                                        if (CKEDITOR.instances.CommentDesc.getData() == '') {
-                                                            //$("#CommentDesc").append("<p>Please Enter Value</p>");
-                                                            return false
-                                                        }
-
-                                                        //$("#btnAddComment").click(function(){
-                                                        $.ajax({
-                                                            type: "post",
-                                                            url: "/Story/AddComment",
-                                                            data: {
-                                                                "storyId": $("#StoryId")[0].value, "description": CKEDITOR.instances.CommentDesc.getData()
-                                                            },
-                                                            datatype: "json",
-                                                            success: function (data) {
-
-                                                                if (data != null) {
-                                                                    alert('Saved');
-                                                                    GetComments();
-                                                                } else {
-                                                                    alert("Failed!");
-
-                                                                }
-
-                                                            }
-                                                        });
-                                                    });
-                                                    $("#btnCancelComment").click(function () {
-                                                        $("#dvComments").css("display", "none");
-                                                        //$("#dvPublishedBy").css("display", "none");
-                                                        //$("#dvPublishedBy").css("display", "none");
-                                                        //$("#hdnIsEdit").val(1);
-                                                        return false;
-                                                    });
-                                                    $("#btnAddCommentPopup").click(function () {
-                                                        $("#dvComments").css("display", "block");
-                                                        //$("#dvPublishedBy").css("display", "none");
-                                                        //$("#dvPublishedBy").css("display", "none");
-                                                        //$("#hdnIsEdit").val(1);
-                                                        return false;
-                                                    });
-
-                                                    $("#btnEditStory").click(function () {
-                                                        $("#dvEditStatus").css("display", "block");
-                                                        $("#dvPublishedBy").css("display", "block");
-                                                        $("#btnAddCommentPopup").css("display", "block");
-                                                        $("#dvSubmittedBy").css("display", "block");
-                                                        $("#hdnIsEdit").val(2);
-                                                        return false;
-                                                    });
-
-
-                                                    //$("#ddlStatusId").change(function () {
-                                                    //    var status = this.value;
-
-                                                    //    if (status == "Published") {
-                                                    //        $("#btnPublish").css("display", "block");
-                                                    //        $("#btnDenyArchive").css("display", "none");
-                                                    //    }
-                                                    //    else if (status == "Hidden") {
-
-                                                    //        $("#btnPublish").css("display", "none");
-                                                    //        $("#btnDenyArchive").css("display", "none");
-                                                    //    }
-                                                    //    else if (status == "Archieved") {
-                                                    //        $("#btnPublish").css("display", "none");
-                                                    //        $("#btnDenyArchive").css("display", "block");
-                                                    //    }
-                                                    //    else {
-                                                    //        $("#btnPublish").css("display", "none");
-                                                    //        $("#btnDenyArchive").css("display", "none");
-                                                    //    }
-
-                                                    //    return false;
-                                                    //});
-
-                                                    //validate();
-                                                    //$('#firstName, #lastName, #email,#cellPhone,#officePhone,#Notes').change(validate);
-                                                });
-
-                                                //function validate() {
-                                                //    $('#Title, #SubmittedBy, #DatePosted,#MediaTypeId,#SourceId,#DateSrcPublished,#StoryLink,#Author,#Tags,#Synopsis,#FeatureOnHomepage').change(validate);
-                                                //    if ($('#Title').val().length > 0 &&
-                                                //        $('#SubmittedBy').val().length > 0 &&
-                                                //        //$('#DatePosted').val().length > 0 &&
-                                                //        $('#MediaTypeId').val().length > 0 &&
-                                                //        $('#SourceId').val().length > 0 &&
-                                                //        $('#DateSrcPublished').val().length > 0 &&
-                                                //        $('#StoryLink').val().length > 0 &&
-                                                //        $('#Author').val().length > 0 &&
-                                                //        $('#Tags').val().length > 0 &&
-                                                //        //$('#LogLine').val().length > 0 &&
-                                                //        $('#Synopsis').val().length > 0 &&
-                                                //        document.getElementById("MediaUrlFile").files.length &&
-                                                //        document.getElementById("FeaturedImageFile").files.length) {
-                                                //        // $("#btnSave").prop("disabled", false);
-                                                //        $("#btnSave").css("display", "block");
-                                                //    }
-                                                //    else {
-                                                //        //$("#btnSave").prop("disabled", true);
-                                                //        $("#btnSave").css("display", "none");
-                                                //    }
-                                                //}
-
-
-                                                function VisibleSaveDraft(obj) {
-                                                    if (obj.value != undefined && obj.value != "".trim()) {
-                                                        if ($('#hdnStatusId').val() == "")
-                                                        $("#btnSaveDraft").css("display", "inline-block");
-                                                        if ($("#StoryId").val() == "")
-                                                            $("#btnPublish").css("display", "inline-block");
-                                                        return true;
+@*<script type="text/javascript">
+                                                    function OnSuccess(response) {
+                                                        var message = "Person Id: " + response.PersonId;
+                                                        message += "\nName: " + response.Name;
+                                                        message += "\nGender: " + response.Gender;
+                                                        message += "\nCity: " + response.City;
+                                                        alert(message);
                                                     }
-                                                    $("#btnSaveDraft").css("display", "none");
-                                                    $("#btnPublish").css("display", "none");
-                                                }
+                                                    function OnFailure(response) {
+                                                        alert("Error occured.");
+                                                    }
+    </script>*@
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$("#btnPublish").css("visibility", "hidden");
+        //$("#btnDenyArchive").css("visibility", "hidden");
 
-                                                function CloseDiv(id) {
-                                                    //alert();
-                                                    id = $("#" + id + "");
-                                                    id.remove();
+        $("#btnAddStory").click(function () {
+            $("#btnPublish").css("display", "none");
+            $("#btnSaveDraft").css("display", "none");
+            $("#btnSaveDraft1").css("display", "none");
+            $("#dvPublishedBy").css("display", "none");
+            $("#dvSubmittedBy").css("display", "none");
+            $("#btnAddCommentPopup").css("display", "none");
+            $("#dvComments").css("display", "none");
+            $("#hdnIsEdit").val(1);
 
-                                                }
+            return false;
+        });
+
+        $("#btnAddComment").click(function () {
+            debugger
+            if (CKEDITOR.instances.CommentDesc.getData() == '') {
+                //$("#CommentDesc").append("<p>Please Enter Value</p>");
+                return false
+            }
+
+            //$("#btnAddComment").click(function(){
+            $.ajax({
+                type: "post",
+                url: "/Story/AddComment",
+                data: {
+                    "storyId": $("#StoryId")[0].value, "description": CKEDITOR.instances.CommentDesc.getData()
+                },
+                datatype: "json",
+                success: function (data) {
+
+                    if (data != null) {
+                        alert('Saved');
+                        CKEDITOR.instances.CommentDesc.setData('');
+                        $('#storyModal').modal('hide');
+                        GetComments();
+                    } else {
+                        alert("Failed!");
+
+                    }
+
+                }
+            });
+        });
+        $("#btnCancelComment").click(function () {
+            $("#dvComments").css("display", "none");
+            //$("#dvPublishedBy").css("display", "none");
+            //$("#dvPublishedBy").css("display", "none");
+            //$("#hdnIsEdit").val(1);
+            return false;
+        });
+        $("#btnAddCommentPopup").click(function () {
+            $("#dvComments").css("display", "block");
+            //$("#dvPublishedBy").css("display", "none");
+            //$("#dvPublishedBy").css("display", "none");
+            //$("#hdnIsEdit").val(1);
+            return false;
+        });
+
+        $("#btnEditStory").click(function () {
+            $("#dvEditStatus").css("display", "block");
+            $("#dvPublishedBy").css("display", "block");
+            $("#btnAddCommentPopup").css("display", "block");
+            $("#dvSubmittedBy").css("display", "block");
+            $("#hdnIsEdit").val(2);
+            return false;
+        });
+
+
+        //$("#ddlStatusId").change(function () {
+        //    var status = this.value;
+
+        //    if (status == "Published") {
+        //        $("#btnPublish").css("display", "block");
+        //        $("#btnDenyArchive").css("display", "none");
+        //    }
+        //    else if (status == "Hidden") {
+
+        //        $("#btnPublish").css("display", "none");
+        //        $("#btnDenyArchive").css("display", "none");
+        //    }
+        //    else if (status == "Archieved") {
+        //        $("#btnPublish").css("display", "none");
+        //        $("#btnDenyArchive").css("display", "block");
+        //    }
+        //    else {
+        //        $("#btnPublish").css("display", "none");
+        //        $("#btnDenyArchive").css("display", "none");
+        //    }
+
+        //    return false;
+        //});
+
+        //validate();
+        //$('#firstName, #lastName, #email,#cellPhone,#officePhone,#Notes').change(validate);
+    });
+
+    //function validate() {
+    //    $('#Title, #SubmittedBy, #DatePosted,#MediaTypeId,#SourceId,#DateSrcPublished,#StoryLink,#Author,#Tags,#Synopsis,#FeatureOnHomepage').change(validate);
+    //    if ($('#Title').val().length > 0 &&
+    //        $('#SubmittedBy').val().length > 0 &&
+    //        //$('#DatePosted').val().length > 0 &&
+    //        $('#MediaTypeId').val().length > 0 &&
+    //        $('#SourceId').val().length > 0 &&
+    //        $('#DateSrcPublished').val().length > 0 &&
+    //        $('#StoryLink').val().length > 0 &&
+    //        $('#Author').val().length > 0 &&
+    //        $('#Tags').val().length > 0 &&
+    //        //$('#LogLine').val().length > 0 &&
+    //        $('#Synopsis').val().length > 0 &&
+    //        document.getElementById("MediaUrlFile").files.length &&
+    //        document.getElementById("FeaturedImageFile").files.length) {
+    //        // $("#btnSave").prop("disabled", false);
+    //        $("#btnSave").css("display", "block");
+    //    }
+    //    else {
+    //        //$("#btnSave").prop("disabled", true);
+    //        $("#btnSave").css("display", "none");
+    //    }
+    //}
+
+
+    function VisibleSaveDraft(obj) {
+        if (obj.value != undefined && obj.value != "".trim()) {
+            if ($('#hdnStatusId').val() == "")
+                $("#btnSaveDraft").css("display", "inline-block");
+            if ($("#StoryId").val() == "")
+                $("#btnPublish").css("display", "inline-block");
+            return true;
+        }
+        $("#btnSaveDraft").css("display", "none");
+        $("#btnPublish").css("display", "none");
+    }
+
+    function CloseDiv(id) {
+        //alert();
+        id = $("#" + id + "");
+        id.remove();
+
+    }
 
 </script>
 
 <script type="text/javascript">
-
-    $(document).ready(function () {
-        $('.ui-datepicker').each(function (i, v) {
+                                                    $(document).ready(function () {
+                                                           $('.ui-datepicker').each(function (i, v) {
 
             $(".ui - datepicker").val(" ");
             //$(v).val($.datepicker.formatDate('dd-M-yy', new Date($(v).val())));

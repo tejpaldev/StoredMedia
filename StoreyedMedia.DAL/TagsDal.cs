@@ -77,6 +77,17 @@ namespace StoreyedMedia.DAL
             return result;
         }
 
+        public List<Tags> GetTagsByStoryId(string tagID)
+        {
+            SqlCommand command = GetDbSprocCommand("GetTagsById");
+            command.Parameters.Add(CreateParameter("@tagID", tagID, 100));
+            //command.Parameters.Add(CreateParameter("@PageNumber", pageNumber));
+            //command.Parameters.Add(CreateParameter("@PageSize", pageSize));
+            //command.Parameters.Add(CreateParameter("@OrderByClause", orderByClause, 20));
+
+            return GetDtoList<Tags>(ref command);
+        }
+
         protected static List<T> GetDtoList<T>(ref SqlCommand command) where T : ModelBase
         {
             List<T> dtoList = new List<T>();
