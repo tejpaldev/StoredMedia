@@ -8,6 +8,8 @@ using StoreyedMedia.Model;
 using StoreyedMedia.BAL;
 using StroreyedMedia.BAL;
 using System.Text;
+using System.Data;
+using Newtonsoft.Json;
 
 namespace StoreyedMedia.Web.Controllers
 {
@@ -19,12 +21,6 @@ namespace StoreyedMedia.Web.Controllers
         private const string FieldCreationDateFormat = "yyyy-MM-ddTHH:mm:ssZ";
         private static int CategoryId = 0;
 
-        enum SaveTypes
-        {
-            Submit = 1,
-            SaveDraft = 2,
-            AddtoBank = 3
-        }
         #endregion
 
         #region Constructor
@@ -54,7 +50,6 @@ namespace StoreyedMedia.Web.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            //GetAllTags();
             List<Media> lstMedia = new List<Media>();
             lstMedia = _service.GetAllMediaType();
             Media media = new Media();
@@ -96,6 +91,27 @@ namespace StoreyedMedia.Web.Controllers
         }
 
         [HttpPost]
+        public JsonResult GetTagsByStoryId(string Prefix)
+        {
+            string TagID = "1,2,3";
+            List<Tags> Lists = _ServiceTags.GetTagsByStoryId(TagID);
+
+
+            string[] words = TagID.Split(',');
+            foreach (string word in words)
+            {
+                //tagIdList.Add(Convert.ToInt32(word));
+            }
+
+
+            var Author = "";// (from N in Lists
+                            //where N.TagId
+                            //select new { N.Tag, N.TagId }).Take(5);
+            return Json(Author, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
         public JsonResult Index(string Prefix)
         {
             List<Story> ObjList = new List<Story>()
@@ -134,14 +150,21 @@ namespace StoreyedMedia.Web.Controllers
         public JsonResult GetStoryById(int Id)
         {
             Story story = new Story();
-            story = _service.GetStoryById(Id);
+            story = _service.GetStoryById(Id);         
+            ViewBag.TagIdList = story.TagIdList;
             story.FeaturedImage = S3Cloud.IsValidGuid(story.FeaturedImage) ? S3Cloud.GetFileFromS3(story.FeaturedImage) : string.Empty;
             if (story.SubmittedBy == null)
                 ViewData["SubmittedBy"] = CommonBase.LoggedInUser1;
             else
                 ViewData["SubmittedBy"] = story.SubmittedBy;
             ViewData["PublishedBy"] = story.PublishedBy;
-            return Json(story, JsonRequestBehavior.AllowGet);
+
+            var list = JsonConvert.SerializeObject(story,Formatting.Indented, new JsonSerializerSettings()
+            {
+              ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            });
+
+            return Json(list, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -156,16 +179,6 @@ namespace StoreyedMedia.Web.Controllers
             else
                 return Json(false);
         }
-
-        //[HttpPost]
-        //public JsonResult GetAllTags()
-        //{
-        //    //List<Tags> tags = new List<Tags>();
-        //    List<Tags> tags = _ServiceTags.GetAllTags();
-        //    var a = (from p in tags select p);
-        //    return Json(tags, JsonRequestBehavior.AllowGet);
-        //}
-
 
         [HttpPost]
         public JsonResult GetComments(int sId)
@@ -194,14 +207,7 @@ namespace StoreyedMedia.Web.Controllers
         [ValidateInput(false)]
         public JsonResult AddComment(int storyId, string description)
         {
-
-            //Story story = new Story();
             var a = _service.AddComment(storyId, description, CommonBase.LoggedInUser1);
-            //story.SubmittedBy = CommonBase.LoggedInUser1;
-            //story.PublishedBy = CommonBase.LoggedInUser1;
-            //story.SubmittedById = CommonBase.LoggedInUserId;
-            //story.PublishedById= CommonBase.LoggedInUserId1;
-            //GetComments(storyId);
             return Json(a, JsonRequestBehavior.AllowGet);
         }
 
@@ -248,32 +254,35 @@ namespace StoreyedMedia.Web.Controllers
                     tagIdList.Add(Convert.ToInt32(word));
                 }
             }
-
+            ViewBag.Message = "B";
             Story result = new Story();
             if (story.StoryId == 0)
             {
                 story.IsNew = true;
                 story.CreatedByUser = "T";
-                //story.DatePosted = DateTime.Now.Date;
                 int isStoryExist = 0;
                 if (story.Title != null && story.StoryLink != null)
                     isStoryExist = _service.IsStoryExist(story.Title, story.StoryLink);
                 if (isStoryExist > 0)
-                    TempData["StoryAlreadyExist"] = "This Story has already been added to the system";
+                {
+                    story.Message = "This Story has already been added to the system";
+                    ViewBag.Message = "This Story has already been added to the system";
+                }
                 else
                 {
                     story.SubmittedById = CommonBase.LoggedInUserId1;
                     result = _service.EditStory(story, null, null, mediaUrlFile, featuredImageFile, tagIdList);
-                    TempData["storyMessage"] = "Story has been added successfully";
+                    ViewBag.Message = "Story has been added successfully";
+                    story.Message = "This Story has already been added to the system";
                 }
             }
             else
             {
                 result = _service.EditStory(story, null, null, mediaUrlFile, featuredImageFile, tagIdList);
-                TempData["storyMessage"] = "Story has been updated successfully";
+                ViewBag.Message = "Story has been updated successfully";
+                story.Message = "This Story has already been added to the system";
             }
-            return Index();
-
+            return Json(ViewBag.Message, JsonRequestBehavior.AllowGet);
         }
 
         #endregion
