@@ -11,8 +11,9 @@ namespace StroreyedMedia.BAL
     {
         #region Constants
 
-        private readonly SourceDal _Source ;
+        private readonly SourceDal _Source;
 
+        static string s3DirectoryName = "Story";
 
         #endregion
 
@@ -31,16 +32,16 @@ namespace StroreyedMedia.BAL
         /// Get Source of a User
         /// </summary> 
         /// <returns></returns>
-        public List<Source> GetAllSources( int pageNumber, int pageSize, out int total,string orderByClause)
+        public List<Source> GetAllSources(int pageNumber, int pageSize, out int total, string orderByClause)
         {
-            total = 0;
-            List<Source> sources=_Source.GetAllSources(pageNumber, pageSize, orderByClause);
+            total = GetTotalSources();
+            List<Source> sources = _Source.GetAllSources(pageNumber, pageSize, orderByClause);
             foreach (var source in sources)
             {
                 //bool isValid = Guid.TryParse(source.DarkLogo, out guidOutput)
-                source.DarkLogo = S3Cloud.IsValidGuid(source.DarkLogo) ?S3Cloud.GetFileFromS3(source.DarkLogo):string.Empty;
+                source.DarkLogo = S3Cloud.IsValidGuid(source.DarkLogo) ? S3Cloud.GetFileFromS3(source.DarkLogo) : string.Empty;
                 source.LightLogo = S3Cloud.IsValidGuid(source.LightLogo) ? S3Cloud.GetFileFromS3(source.LightLogo) : string.Empty;
-                source.StatusText = source.Status==0? "Archive":"Active";
+                source.StatusText = source.Status == 0 ? "Archive" : "Active";
             }
             return sources;
         }
@@ -55,7 +56,7 @@ namespace StroreyedMedia.BAL
         }
 
 
-        
+
         /// <summary>
         /// Get Details of a Source
         /// </summary>
@@ -63,8 +64,8 @@ namespace StroreyedMedia.BAL
         /// <returns></returns>
         public Source GetSourceDetailsById(int SourceId)
         {
-            var source= _Source.GetSourceDetailsById(SourceId);
-            source.DarkLogo=S3Cloud.GetFileFromS3(source.DarkLogo);
+            var source = _Source.GetSourceDetailsById(SourceId);
+            source.DarkLogo = S3Cloud.GetFileFromS3(source.DarkLogo);
             source.LightLogo = S3Cloud.GetFileFromS3(source.LightLogo);
             return source;
         }
@@ -76,7 +77,7 @@ namespace StroreyedMedia.BAL
         /// <returns></returns>
         public Source EditSource(Source source, HttpPostedFileBase darkLogoFile, HttpPostedFileBase lightLogoFile)
         {
-            if (darkLogoFile!=null)
+            if (darkLogoFile != null)
             {
                 var darkLogo = darkLogoFile;
                 source.DarkLogo = S3Cloud.KeyGenerator();
@@ -92,16 +93,25 @@ namespace StroreyedMedia.BAL
 
             return _Source.EditSource(source);
 
-        } 
+        }
 
-       
+        /// <summary>
+        /// Get Sources
+        /// </summary> 
+        /// <returns></returns>
+        public List<Source> GetSources()
+        {
+            List<Source> sources = _Source.GetSources();
+            return sources;
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         public bool ArchiveASource(int id)
-        { 
+        {
             return _Source.ArchiveASource(id, CommonBase.LoggedInUser);
         }
 
@@ -112,15 +122,15 @@ namespace StroreyedMedia.BAL
 
         #region Private Methods
 
-        private bool SaveImageToCloud( HttpPostedFileBase  file,string key)
+        private bool SaveImageToCloud(HttpPostedFileBase file, string key)
         {
-             
-             return   S3Cloud.FileUpload(file,key);
-             
+
+            return S3Cloud.FileUpload(file, key, s3DirectoryName);
+
         }
 
 
         #endregion
-         
+
     }
 }

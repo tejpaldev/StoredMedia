@@ -7,7 +7,7 @@ namespace StoreyedMedia.DAL
 {
     public class SourceDal : DalBase
     {
-        
+
 
         #region Repository Methods 
 
@@ -26,14 +26,14 @@ namespace StoreyedMedia.DAL
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
-        public List<Source> GetAllSources( int pageNumber, int pageSize,string orderByClause)
+        public List<Source> GetAllSources(int pageNumber, int pageSize, string orderByClause)
         {
-            
-            SqlCommand command = GetDbSprocCommand("GetAllSources"); 
+
+            SqlCommand command = GetDbSprocCommand("GetAllSources");
             command.Parameters.Add(CreateParameter("@PageNumber", pageNumber));
             command.Parameters.Add(CreateParameter("@PageSize", pageSize));
-            command.Parameters.Add(CreateParameter("@OrderByClause", orderByClause,20));
-            
+            command.Parameters.Add(CreateParameter("@OrderByClause", orderByClause, 20));
+
             return GetDtoList<Source>(ref command);
         }
 
@@ -43,7 +43,7 @@ namespace StoreyedMedia.DAL
         /// <returns></returns>
         public int GetTotalSources()
         {
-            SqlCommand command = GetDbSprocCommand("GetSourcesCount"); 
+            SqlCommand command = GetDbSprocCommand("GetSourcesCount");
             int result = 0;
             try
             {
@@ -82,11 +82,22 @@ namespace StoreyedMedia.DAL
         public Source GetSourceDetailsById(int SourceId)
         {
             SqlCommand command = GetDbSprocCommand("GetSourceByID");
-            command.Parameters.Add(CreateParameter("@SourceId", SourceId)); 
+            command.Parameters.Add(CreateParameter("@SourceId", SourceId));
             return GetSingleDto<Source>(ref command);
         }
 
-         
+
+        /// <summary>
+        /// Get Sources 
+        /// </summary> 
+        /// <returns></returns>
+        public List<Source> GetSources()
+        {
+
+            SqlCommand command = GetDbSprocCommand("GetSources");
+            return GetDtoList<Source>(ref command);
+        }
+
 
         /// <summary>
         /// Add/Update a Source
@@ -96,24 +107,24 @@ namespace StoreyedMedia.DAL
         public Source EditSource(Source Source)
         {
             SqlCommand command = GetDbSprocCommand("CreateSource");
-            command.Parameters.Add(CreateParameter("@SourceId", Source.SourceId)); 
+            command.Parameters.Add(CreateParameter("@SourceId", Source.SourceId));
             command.Parameters.Add(CreateParameter("@DarkLogo", Source.DarkLogo, 50));
             command.Parameters.Add(CreateParameter("@SourceName", Source.SourceName, 100));
             command.Parameters.Add(CreateParameter("@LightLogo", Source.LightLogo, 50));
-            command.Parameters.Add(CreateParameter("@Status", Source.Status ));
+            command.Parameters.Add(CreateParameter("@Status", Source.Status));
             if (Source.IsNew)
             {
                 command.Parameters.Add(CreateParameter("@CreatedByUser", Source.CreatedByUser, 50));
             }
             else
             {
-                command.Parameters.Add(CreateParameter("@LastModifiedByUser", Source.LastModifiedByUser, 50)); 
+                command.Parameters.Add(CreateParameter("@LastModifiedByUser", Source.LastModifiedByUser, 50));
             }
- 
+
             return GetSingleDto<Source>(ref command);
         }
 
-        
+
         /// <summary>
         /// Archive A Source
         /// </summary>
@@ -122,18 +133,18 @@ namespace StoreyedMedia.DAL
         public bool ArchiveASource(int id, string lastModifiedByUser)
         {
             SqlCommand command = GetDbSprocCommand("ArchiveSource");
-            command.Parameters.Add(CreateParameter("@SourceId", id)); 
+            command.Parameters.Add(CreateParameter("@SourceId", id));
             command.Parameters.Add(CreateParameter("@LastModifiedByUser", lastModifiedByUser, 50));
             return ExecuteNonQueryProcedures(ref command);
         }
 
-           
+
 
 
         #endregion
 
         #region Private Methods 
-         
+
 
         /// <summary>
         /// Execute non query procedures.
@@ -146,18 +157,18 @@ namespace StoreyedMedia.DAL
             try
             {
                 command.Connection.Open();
-             
+
                 SqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows || reader.RecordsAffected>0)
-                { 
+                if (reader.HasRows || reader.RecordsAffected > 0)
+                {
                     //reader.Read();
                     result = true;
-                 //   PopulateOrdinals(reader);
+                    //   PopulateOrdinals(reader);
                     //if (!reader.IsDBNull(_ordinalIsStarred))
                     //{
                     //    result = reader.GetBoolean(_ordinalResult);
                     //}
-                   
+
                     reader.Close();
                 }
 
@@ -175,7 +186,7 @@ namespace StoreyedMedia.DAL
             return result;
         }
 
-        
+
 
         #endregion
     }

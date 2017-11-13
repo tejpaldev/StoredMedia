@@ -16,6 +16,7 @@ namespace StroreyedMedia.BAL
         private readonly StoryDal _Story;
         private string _StoryAddedSuccess = "Story Added";
         private string _StoryAddedFailed = "Failed To Add Story";
+        static string s3DirectoryName = "Story";
 
 
         #endregion
@@ -163,8 +164,6 @@ namespace StroreyedMedia.BAL
         #endregion
 
 
-
-
         /// <summary>
         /// Get Story of a User
         /// </summary> 
@@ -185,16 +184,7 @@ namespace StroreyedMedia.BAL
             return _Story.GetTotalStories();
         }
 
-        /// <summary>
-        /// Get Details of a Story
-        /// </summary>
-        /// <param name="StoryId"></param>
-        /// <returns></returns>
-        public Story GetStoryDetailsById(int StoryId)
-        {
-            var Story = _Story.GetStoryDetailsById(StoryId);
-            return Story;
-        }
+
 
         /// <summary>
         /// Check if story alreay exist
@@ -263,6 +253,66 @@ namespace StroreyedMedia.BAL
             return editStoryStatus;
         }
 
+        /// <summary>
+        /// Get Details of a Story
+        /// </summary>
+        /// <param name="storyId"></param>
+        /// <returns></returns>
+        public Story GetStoryDetailsById(int storyId)
+        {
+            var story = _Story.GetStoryDetailsById(storyId);
+            story.FeaturedImage = S3Cloud.IsValidGuid(story.FeaturedImage) ? S3Cloud.GetFileFromS3(story.FeaturedImage, s3DirectoryName) : string.Empty;
+
+            return story;
+        }
+
+        /// <summary>
+        /// Get Related Stories
+        /// </summary>
+        /// <param name="storyId"></param>
+        /// <returns></returns>
+        public List<Story> GetRelatedStories(int storyId)
+        {
+            var stories = _Story.GetRelatedStories(storyId);
+
+            if (stories != null && stories.Count > 0)
+            {
+                foreach (var story in stories)
+                {
+                    story.StoryThumbnail = S3Cloud.IsValidGuid(story.StoryThumbnail) ? S3Cloud.GetFileFromS3(story.StoryThumbnail, s3DirectoryName) : string.Empty;
+
+                }
+            }
+            return stories;
+        }
+
+        /// <summary>
+        /// Get Stories By Author
+        /// </summary>
+        /// <param name="author"></param>
+        /// <returns></returns>
+        public List<Story> GetStoriesByAuthor(string author)
+        {
+            if (!string.IsNullOrEmpty(author))
+            {
+                var stories = _Story.GetStoriesByAuthor(author);
+                return stories;
+            }
+            return null;
+
+        }
+
+        /// <summary>
+        /// Get Tags By StoryId
+        /// </summary>
+        /// <param name="storyId"></param>
+        /// <returns></returns>
+        public List<Tags> GetTagsByStoryId(int storyId)
+        {
+            var tags = _Story.GetTagsByStoryId(storyId);
+            return tags;
+        }
+
 
         public List<Comment> GetComments(int id)
         {
@@ -275,7 +325,6 @@ namespace StroreyedMedia.BAL
             int results = _Story.AddComment(storyId, description, CreatedBy);
             return results;
         }
-
         #endregion
 
         #region Private Methods
@@ -361,13 +410,12 @@ namespace StroreyedMedia.BAL
 
 
         #endregion
+        class TagList
+        {
+            public string Id { get; set; }
 
+            public string Tags { get; set; }
+        }
 
-    }
-    class TagList
-    {
-        public string Id { get; set; }
-
-        public string Tags { get; set; }
     }
 }

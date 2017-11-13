@@ -90,6 +90,42 @@ namespace StoreyedMedia.DAL
 
 
         /// <summary>
+        /// Get Related Stories
+        /// </summary>
+        /// <param name="storyId"></param>
+        /// <returns></returns>
+        public List<Story> GetRelatedStories(int storyId)
+        {
+            SqlCommand command = GetDbSprocCommand("GetRelatedStories");
+            command.Parameters.Add(CreateParameter("@StoryId", storyId));
+            return GetDtoList<Story>(ref command);
+        }
+
+        /// <summary>
+        /// Get Stories By Author
+        /// </summary>
+        /// <param name="authorName"></param>
+        /// <returns></returns>
+        public List<Story> GetStoriesByAuthor(string authorName)
+        {
+            SqlCommand command = GetDbSprocCommand("GetStoriesByAuthor");
+            command.Parameters.Add(CreateParameter("@Author", authorName, 50));
+            return GetDtoList<Story>(ref command);
+        }
+
+        /// <summary>
+        /// Get Tags By Story Id
+        /// </summary>
+        /// <param name="storyId"></param>
+        /// <returns></returns>
+        public List<Tags> GetTagsByStoryId(int storyId)
+        {
+            SqlCommand command = GetDbSprocCommand("GetTagsByStoryId");
+            command.Parameters.Add(CreateParameter("@StoryId", storyId));
+            return GetDtoList<Tags>(ref command);
+        }
+
+        /// <summary>
         /// Check if story alreay exist
         /// </summary>
         /// <param name="StoryId"></param>
