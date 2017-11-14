@@ -56,7 +56,6 @@
             $("#Synopsis").val("");
             $("#FeatureOnHomepage").prop("checked", false);
             // $("#FeatureOnHomepage").val("");
-            $("#storyModal").modal("show");
             $("#MediaUrlFile").val("");
             $("#FeaturedImageFile").val("");
             $("#MediaUrlFile").css("display", "block");
@@ -69,6 +68,10 @@
             $("#btnSaveDraft").css("display", "none");
             $("#btnSaveDraft1").css("display", "none");
             $("#btnAddBanks").css("display", "inline-block");
+            $.post('@Url.Action("FillDropDownValues", "Story")',
+                function (data) {
+                });
+            $("#storyModal").modal("show");
         }
         function CreateAlert() {
 
@@ -136,19 +139,16 @@
 
             $('form').ajaxForm({
                 beforeSend: function () {
-                    //status.empty();
-                    //var percentVal = '0%';$("#ddlStatusId  option:selected").val()
-                    //bar.width(percentVal)
-                    //percent.html(percentVal); $('#IsNew')[0].value
                     $('#changeStatusModal').modal('hide');
                 },
-
+                success: function (data) {
+                },
                 failure: function (data) {
-                    debugger
-                    alert(data);
                 },
                 complete: function (data) {
                     $("#storyModal").modal("hide");
+                    $("#display-msg").text(data.responseText.replace(/"/g, ""));
+                    $("#display-msg").delay(2000).fadeOut();
                 }
             });
 
@@ -181,30 +181,7 @@
             $("#btnAddStory").on("click", Add);
             //$("#btnEditStory").on("click", Edit("1"));
             $("#btnSearch").on("click", Search);
-
-            //$("#ddlStatusId").on("change", function () {
-            //    var StoryId = $("#StoryId").val();
-            //    var StatusId = $(this).val();
-            //    $.ajax({
-            //        type: "post",
-            //        url: "/Story/IsStatusPublished",
-            //        data: { "Id": StoryId, "StatusId": StatusId },
-            //        datatype: "json",
-            //        success: function (data) {
-            //            if (data == 'true')
-            //                $('#changeStatusModal').modal('show');
-            //        }
-            //    });
-            //});
-
-            //$("#btnChangeStatus").on("click", ChangeStatus);
         });
-
-
-        setTimeout(function () {
-            $('#display-msg').fadeOut().text('');
-            $('#display-error').fadeOut().text('');
-        }, 3000);
 
         function GetComments() {
             $.ajax({
@@ -274,8 +251,10 @@
             $("#DateSrcPublished").val(formatDate(e.DateSrcPublished));
             $("#StoryLink").val(e.StoryLink);
             $("#dvCreateDynamicBoxes").empty();
-            for (i = 0; i < e.TagIdList.length; i++) {
-                $("#dvCreateDynamicBoxes").append('<div style="border: 1px solid;" class="btns" id="' + e.TagIdList[i].Id + '" > ' + e.TagIdList[i].Name + '<a style="float:right;" class="bt"' + 'onclick="CloseDiv(' + e.TagIdList[i].Id + ')"' + 'id=btSubmit> X</a ></div >');
+            if (e.TagIdList != null && e.TagIdList.length != null) {
+                for (i = 0; i < e.TagIdList.length; i++) {
+                    $("#dvCreateDynamicBoxes").append('<div style="border: 1px solid;" class="btns" id="' + e.TagIdList[i].Id + '" > ' + e.TagIdList[i].Name + '<a style="float:right;" class="bt"' + 'onclick="CloseDiv(' + e.TagIdList[i].Id + ')"' + 'id=btSubmit> X</a ></div >');
+                }
             }
 
             $("#Author").val(e.Author);
@@ -307,53 +286,6 @@
             }
 
         }
-
-        //function SaveStory(action) {
-
-        //    //var storyDetail=[];
-        //    //contactIdList = [];
-        //    var storyDetail= {
-        //        //If Edit then set value
-        //        StoryId: "0",
-        //        //IsNew: $('#IsNew')[0].value,
-        //        Title: $('#Title')[0].value,
-        //        //CreatedOnDateTime: $('#CreatedOnDateTime')[0].value,
-        //        SubmittedBy: $('#SubmittedBy')[0].value,
-        //        DatePosted: $('#DatePosted')[0].value,
-        //        MediaTypeId: $('#MediaTypeId')[0].value,
-        //        SourceId: $('#SourceId')[0].value,
-        //        DateSrcPublished: $('#DateSrcPublished')[0].value,
-        //        StoryLink: $('#StoryLink')[0].value,
-        //        Author: $('#Author')[0].value,
-        //        Tags: $('#Tags')[0].value,
-        //        LogLine: $('#LogLine')[0].value,
-        //        Synopsis: $('#Synopsis')[0].value,
-        //        FeatureOnHomepage: $('#FeatureOnHomepage')[0].value
-        //    }
-        //    var fd = new FormData($("#frmStory"));
-        //    //var formData = new FormData();
-        //    fd.append('file', $('#FeaturedImageFile')[0].files[0]);
-        //    $.ajax({
-        //        type: "post",
-        //        url: "/Story/Save",
-        //        data: { "action": action, "story": storyDetail, "IsEdit": "0", "featuredImageFile": fd},
-        //        //data: $('#formId').serialize(),
-        //        datatype: "json",
-        //        success: function (data) {
-
-        //            if (data == "True") {
-        //                location.reload();
-        //                $(".chkContacts").prop("checked", false);
-
-
-        //            } else {
-        //                alert("Failed!");
-
-        //            }
-
-        //        }
-        //    });
-        //}
 
 
         function BulkActions(action)
@@ -393,10 +325,7 @@
             });
 
             setTimeout(function () {
-                $('#display-success').fadeOut().text('');
-                $('#display-exist').fadeOut().text('');
-                //$('#display-error').fadeOut().text('');
-                //$('#display-delete').fadeOut().text('');
+                $('#display-msg').fadeOut().text('');
             }, 3000);
 
             }
@@ -417,43 +346,44 @@
             </div>
 
         }
-        @if (TempData["message"] != null)
-        {
-            <div style="color:green" id="display-msg">@TempData["message"]</div>
-        }
-        @if (TempData["StoryAlreadyExist"] != null)
-        {
-            <div style="color:red" id="display-exist">@TempData["StoryAlreadyExist"]</div>
-        }
-        @if (TempData["storyMessage"] != null)
-        {
-            <div style="color:red" id="display-success">@TempData["storyMessage"]</div>
-        }
-        @if (TempData["multipleAction"] != null)
-        {
-            <div style="color:green" id="display-delete">@TempData["multipleAction"]</div>
-        }
+        @*@if (TempData["message"] != null)
+            {
+                <div style="color:green" id="display-msg">@TempData["message"]</div>
+            }
+            @if (TempData["StoryAlreadyExist"] != null)
+            {
+                @*<div style="color:red" id="display-exist">@TempData["StoryAlreadyExist"]</div>
+            }
+            @if (TempData["storyMessage"] != null)
+            {
+                <div style="color:red" id="display-success">@TempData["storyMessage"]</div>
+            }
+            @if (TempData["multipleAction"] != null)
+            {
+                <div style="color:green" id="display-delete">@TempData["multipleAction"]</div>
+            }*@
+        <div style="color:green" id="display-msg"></div>
         <h2>Contacts</h2>
         <div class="row">
             <div class="pull-right">
                 <button type="button" id="btnAddStory" class="btn btn-default pull-right">Add Story</button>
             </div>
             <div class="pull-right">
-                <button type="button" id="btnEditStory" onclick="GetStoryById(2041)" class="btn btn-default pull-right">Edit Story</button>
+                <button type="button" id="btnEditStory" onclick="GetStoryById(38)" class="btn btn-default pull-right">Edit Story</button>
             </div>
         </div>
         <br />
         <table id="contactsGrid" data-source="@Url.Action("GetStories" )"></table>
     </div>
     <form id="frmComment" action="" method="post"></form>
-   @using (Ajax.BeginForm("Save", "Story", new AjaxOptions { OnSuccess = "OnSuccess", OnFailure = "OnFailure", LoadingElementId = "progress" }))
-   {
+    @using (Ajax.BeginForm("Save", "Story", new AjaxOptions { OnSuccess = "OnSuccess", OnFailure = "OnFailure", LoadingElementId = "progress" }))
+    {
         @Html.Hidden("hdnIsEdit", 1);
         @*@Html.Hidden("hdnAction", "Published");*@
         @Html.ValidationSummary(true)
     <!-- Modal -->
         <div class="modal fade" id="storyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog" style="height: 150px">
+            <div class="modal-dialog" style="height: 150px;position:absolute">
                 <div class="modal-content">
                     <div class="modal-header">
                         <label style="float:left">
@@ -755,13 +685,10 @@
         });
 
         $("#btnAddComment").click(function () {
-            debugger
             if (CKEDITOR.instances.CommentDesc.getData() == '') {
-                //$("#CommentDesc").append("<p>Please Enter Value</p>");
                 return false
             }
 
-            //$("#btnAddComment").click(function(){
             $.ajax({
                 type: "post",
                 url: "/Story/AddComment",
@@ -772,10 +699,9 @@
                 success: function (data) {
 
                     if (data != null) {
-                        alert('Saved');
                         CKEDITOR.instances.CommentDesc.setData('');
-                        $('#storyModal').modal('hide');
                         GetComments();
+                        $("#dvComments").css("display", "none");
                     } else {
                         alert("Failed!");
 

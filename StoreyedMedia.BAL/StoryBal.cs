@@ -77,7 +77,7 @@ namespace StroreyedMedia.BAL
         public List<Story> GetFeaturedStories(int pageNumber, int pageSize, out int total, string orderByClause)
         {
             total = 0;
-            List<Story> Stories = _Story.GetFeaturedStories(pageNumber, pageSize, orderByClause);
+            List<Story> Stories = _Story.GetFeaturedStories(pageNumber, pageSize, orderByClause) ?? new List<Story>();
             foreach (var Story in Stories)
             {
                 Story.StoryThumbnail = S3Cloud.IsValidGuid(Story.StoryThumbnail) ? S3Cloud.GetFileFromS3(Story.StoryThumbnail) : string.Empty;
@@ -97,7 +97,8 @@ namespace StroreyedMedia.BAL
         public List<Story> GetFeaturedSliderStories(int pageNumber, int pageSize, out int total, string orderByClause)
         {
             total = 0;
-            List<Story> Stories = _Story.GetFeaturedSliderStories(pageNumber, pageSize, orderByClause);
+            List<Story> Stories = _Story.GetFeaturedSliderStories(pageNumber, pageSize, orderByClause) ?? new List<Story>();
+
             foreach (var Story in Stories)
             {
 
@@ -111,47 +112,25 @@ namespace StroreyedMedia.BAL
         public Story GetStoryById(int id)
         {
             Story results = _Story.GetStoryById(id);
-
-            DataTable dt = results.TagIdList;
-
-
-            //List<TagList> lst = new List<TagList>();
-            //for (int i = 0; i < dt.Rows.Count; i++)
-            //{
-            //    TagList tg = new TagList();
-            //    tg.Id = dt.Rows[i]["Id"].ToString();
-            //    tg.Tags = dt.Rows[i]["Name"].ToString();
-            //    lst.Add(tg);
-            //}
-
-
-            DataTable dtN = new DataTable();
-            dtN.Columns.Add("Id");
-            dtN.Columns.Add("Name");
-
-            for (int i = 0; i < dt.Rows.Count; i++)
+            if (results != null && results.TagIdList != null)
             {
-                string str = dt.Rows[i]["TagIdList"].ToString();
-                string[] values = str.Split('_');
-                DataRow dr = dtN.NewRow();
+                DataTable dt = results.TagIdList;
+                DataTable dtN = new DataTable();
+                dtN.Columns.Add("Id");
+                dtN.Columns.Add("Name");
 
-                dr["Id"] = values[0];
-                dr["Name"] = values[1];
-
-                dtN.Rows.Add(dr);
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    string str = dt.Rows[i]["TagIdList"].ToString();
+                    string[] values = str.Split('_');
+                    DataRow dr = dtN.NewRow();
+                    dr["Id"] = values[0];
+                    dr["Name"] = values[1];
+                    dtN.Rows.Add(dr);
+                }
+                results.TagIdList = dtN;
             }
-
-
-            results.TagIdList = dtN;
-
-            results.TagIdList = dtN;
-            //string TagString = string.Empty;
-            ////int numRows = dt.Rows.Count;
-            //for (int i = 0; i < dt.Rows.Count; i++)
-            //{
-            //    string a = dt.Rows[i][1].ToString() + "_";
-            //    TagString += a;
-            //}
+            //results.TagIdList = dtN;
             return results;
         }
 

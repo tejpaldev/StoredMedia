@@ -50,30 +50,7 @@ namespace StoreyedMedia.Web.Controllers
         /// <returns></returns>
         public ActionResult Index()
         {
-            List<Media> lstMedia = new List<Media>();
-            lstMedia = _service.GetAllMediaType();
-            Media media = new Media();
-            media.MediaTypeId = 0;
-            media.MediaType = "Select Media Type";
-            lstMedia.Insert(0, media);
-            SelectList mediaList = new SelectList(lstMedia, "MediaTypeId", "MediaType");
-            ViewData["MediaTypeId"] = mediaList;
-            List<Source> lstSource = new List<Source>();
-            lstSource = _ServiceSource.GetSources();
-            Source source = new Source();
-            source.SourceId = 0;
-            source.SourceName = "Select Source";
-            lstSource.Insert(0, source);
-            SelectList sourceList = new SelectList(lstSource, "SourceId", "SourceName");
-            ViewData["SourceId"] = sourceList;
-            List<Story> lstStatus = new List<Story>();
-            lstStatus = _service.GetEditStoryStatuses();
-            Story story = new Story();
-            story.StatusId = 0;
-            story.Status = "Select Status";
-            lstStatus.Insert(0, story);
-            SelectList statusList = new SelectList(lstStatus, "StatusId", "Status");
-            ViewData["StatusId"] = statusList;
+            FillDropDownValues();
             return View("StoryBank");
         }
 
@@ -150,8 +127,9 @@ namespace StoreyedMedia.Web.Controllers
         public JsonResult GetStoryById(int Id)
         {
             Story story = new Story();
-            story = _service.GetStoryById(Id);         
-            ViewBag.TagIdList = story.TagIdList;
+            story = _service.GetStoryById(Id);
+            if (story.TagIdList != null)
+                ViewBag.TagIdList = story.TagIdList;
             story.FeaturedImage = S3Cloud.IsValidGuid(story.FeaturedImage) ? S3Cloud.GetFileFromS3(story.FeaturedImage) : string.Empty;
             if (story.SubmittedBy == null)
                 ViewData["SubmittedBy"] = CommonBase.LoggedInUser1;
@@ -159,11 +137,10 @@ namespace StoreyedMedia.Web.Controllers
                 ViewData["SubmittedBy"] = story.SubmittedBy;
             ViewData["PublishedBy"] = story.PublishedBy;
 
-            var list = JsonConvert.SerializeObject(story,Formatting.Indented, new JsonSerializerSettings()
+            var list = JsonConvert.SerializeObject(story, Formatting.Indented, new JsonSerializerSettings()
             {
-              ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             });
-
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
@@ -265,7 +242,6 @@ namespace StoreyedMedia.Web.Controllers
                     isStoryExist = _service.IsStoryExist(story.Title, story.StoryLink);
                 if (isStoryExist > 0)
                 {
-                    story.Message = "This Story has already been added to the system";
                     ViewBag.Message = "This Story has already been added to the system";
                 }
                 else
@@ -273,18 +249,45 @@ namespace StoreyedMedia.Web.Controllers
                     story.SubmittedById = CommonBase.LoggedInUserId1;
                     result = _service.EditStory(story, null, null, mediaUrlFile, featuredImageFile, tagIdList);
                     ViewBag.Message = "Story has been added successfully";
-                    story.Message = "This Story has already been added to the system";
                 }
             }
             else
             {
                 result = _service.EditStory(story, null, null, mediaUrlFile, featuredImageFile, tagIdList);
                 ViewBag.Message = "Story has been updated successfully";
-                story.Message = "This Story has already been added to the system";
             }
             return Json(ViewBag.Message, JsonRequestBehavior.AllowGet);
         }
 
+
+        [HttpPost]
+        public void FillDropDownValues()
+        {
+            List<Media> lstMedia = new List<Media>();
+            lstMedia = _service.GetAllMediaType();
+            Media media = new Media();
+            media.MediaTypeId = 0;
+            media.MediaType = "Select Media Type";
+            lstMedia.Insert(0, media);
+            SelectList mediaList = new SelectList(lstMedia, "MediaTypeId", "MediaType");
+            ViewData["MediaTypeId"] = mediaList;
+            List<Source> lstSource = new List<Source>();
+            lstSource = _ServiceSource.GetSources();
+            Source source = new Source();
+            source.SourceId = 0;
+            source.SourceName = "Select Source";
+            lstSource.Insert(0, source);
+            SelectList sourceList = new SelectList(lstSource, "SourceId", "SourceName");
+            ViewData["SourceId"] = sourceList;
+            List<Story> lstStatus = new List<Story>();
+            lstStatus = _service.GetEditStoryStatuses();
+            Story story = new Story();
+            story.StatusId = 0;
+            story.Status = "Select Status";
+            lstStatus.Insert(0, story);
+            SelectList statusList = new SelectList(lstStatus, "StatusId", "Status");
+            ViewData["StatusId"] = statusList;
+        }
         #endregion
     }
 }
